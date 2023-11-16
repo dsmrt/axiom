@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "nodenext",
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "nodenext"
+  },
+  "include": ["cli.ts"]
+}

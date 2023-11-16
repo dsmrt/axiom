@@ -1,0 +1,78 @@
+import { readFileSync } from 'fs'
+import { findUpSync } from 'find-up'
+
+export interface Config {
+    name: string;
+    env: string;
+    aws: {
+        account: string;
+        region: string;
+        profile: string;
+        baseParameterPath: string;
+    }
+}
+
+export interface LoadConfigInput {
+    /**
+     * defaults to prod
+     */
+    env?: string;
+    /**
+     * Override configs
+     */
+    overrides?: Config;
+    /**
+     * Load config from a sub directory
+     */
+    cwd?: string;
+}
+
+export const importConfigFromPath = (path: string): any => {
+  let config: Config
+  if (/\.json$/.test(path)) {
+    return JSON.parse(
+      readFileSync(path).toString()
+    )
+  }
+  if (/\.js$/.test(path)) {
+    return require(require.resolve(path))
+  }
+
+  if (/\.ts$/.test(path)) {
+    return require(require.resolve(path))
+  }
+
+  throw new Error(`Path not found: {path}`)
+}
+
+export const loadConfig = (input?: LoadConfigInput) => {
+    // get the base file
+    const baseConfigFile = configPath(input)
+
+    const baseConfig = importConfigFromPath(baseConfigFile)
+
+    let overrides = input?.overrides || {}
+
+    // get the environment file 
+    if(input?.env) {
+        console.log(input?.env)
+        const devConfig = importConfigFromPath(configPath(input))
+        overrides = {...devConfig, ...overrides,}
+    }
+    // merge env file
+    return {...baseConfig, ...overrides}
+}
+
+export const configPath = (input?: LoadConfigInput): string => {
+    const envIndicator = input?.env ? `.${input.env}` : ''
+    const p = findUpSync([
+        `.axiom${envIndicator}.json`,
+        `.axiom${envIndicator}.js`,
+        `.axiom${envIndicator}.ts`,
+    ], { cwd: input?.cwd })
+
+    if(p === undefined)
+        throw new Error(`Axiom config files not found: .axiom${envIndicator}.json, .axiom${envIndicator}.js .axiom${envIndicator}.ts`)
+
+    return p
+}
