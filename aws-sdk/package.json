@@ -5,8 +5,8 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "test": "vitest --config ../vitest.config.ts",
-    "coverage": "vitest watch --coverage --config ../vitest.config.ts"
+    "test": "vitest",
+    "coverage": "vitest watch --coverage"
   },
   "keywords": [],
   "author": "",
