@@ -1,2 +1,4 @@
-export * from "./base.ts"
-export * from "./get.ts"
+export * from "./base"
+export * from "./get"
+export * from "./set"
+export * from "./delete"

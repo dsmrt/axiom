@@ -1,29 +1,42 @@
 import { CommandModule, Argv, ArgumentsCamelCase } from 'yargs'
 import { loadConfig, AwsConfigs } from 'axiom-config'
 import { ParameterCollection } from 'axiom-aws-sdk'
-import { SSMClient } from '@aws-sdk/client-ssm'
-import { CachedCredentialProvider } from '../../aws/credentials-provider.ts'
-import { awsOptions, commonOptions } from '../../options.ts'
+import { SSMClient, Parameter } from '@aws-sdk/client-ssm'
+import { CachedCredentialProvider } from '../../aws/credentials-provider'
+import { awsOptions, commonOptions } from '../../options'
+import { buildPath } from './utils'
+import chalk from 'chalk'
 
 
 interface Options extends AwsConfigs {
     env: string;
+    path: string;
 }
 
-export class Get<U extends Options> implements CommandModule<{}, U> {
-  public command = 'config'
-  public describe = 'print the config'
+export class GetCommand<U extends Options> implements CommandModule<{}, U> {
+  public command = 'get [path]'
+  public describe = 'Get all parameters under the base path'
 
   public builder = (args: Argv): Argv<U> => {
-    return commonOptions(awsOptions(args)) as unknown as Argv<U>
+    const config = loadConfig()
+    args = commonOptions(awsOptions(args))
+    args.positional('path', {
+      type: 'string',
+      describe: `OPTIONAL path to parameter. Supports absolute and relative paths.` +
+        // @ts-ignore
+        `\nExample: "/root/myParam" or "service/secret" (which translates to, "${buildPath(config as Option & Config, "service/secret")})`,
+      // default: config.awsSsmParameterPath,
+    })
+
+    return args as unknown as Argv<U>
   }
 
   public handler = async (args: ArgumentsCamelCase<U>) => {
 
     const config = loadConfig({ env: args.env })
 
-    const params = new ParameterCollection(
-        args.baseParameterPath,
+    const collection = new ParameterCollection(
+        config.aws?.baseParameterPath,
         new SSMClient({
             region: config.aws.region,
             credentials: await CachedCredentialProvider({
@@ -35,11 +48,19 @@ export class Get<U extends Options> implements CommandModule<{}, U> {
         })
     )
 
-    const result = Array.from(params.map).map((param) => {
-        return { name: param[0], value: param[1] }
-    })
+    const params = await collection.get()
 
-    console.table(result)
+    params.forEach((parameter: Parameter, key: string | number) => {
+      console.log(
+        chalk.gray(
+          parameter.Name?.replace(/\/([^/]+)$/, '/' + chalk.bold.green('$1'))
+        ),
+        chalk.bold.white(
+          parameter.Value
+        )
+      )
+    });
+
   }
 }
 

@@ -1,2 +1,2 @@
-export * from './ssm-parameters.js'
-export * from './ssm-parameter-collection.js'
+export * from './ssm-parameters'
+export * from './ssm-parameter-collection'

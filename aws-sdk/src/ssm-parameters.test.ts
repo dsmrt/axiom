@@ -3,7 +3,7 @@ import {
   getParameters,
   ssmClient as client,
   extractParamValue
-} from './ssm-parameters.ts'
+} from './ssm-parameters'
 
 import {
   basePath as byPathBasePath,

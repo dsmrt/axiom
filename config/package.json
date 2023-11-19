@@ -3,10 +3,9 @@
   "version": "0.0.1",
   "description": "",
   "main": "src/index.ts",
-  "type": "module",
   "scripts": {
     "test": "vitest",
-    "converage": "vitest run --coverage"
+    "coverage": "vitest watch --coverage"
   },
   "keywords": [],
   "author": "",
@@ -20,7 +19,7 @@
     "vitest": "^0.34.6"
   },
   "dependencies": {
-    "find-up": "^6.3.0",
+    "find-up": "^5.0.0",
     "yargs": "^17.7.2"
   }
 }

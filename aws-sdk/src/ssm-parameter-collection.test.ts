@@ -1,6 +1,6 @@
 import { ParameterCollection } from "./ssm-parameter-collection";
 import { Parameter } from "@aws-sdk/client-ssm";
-import { basePath, result1 } from "./__mocks__/get-parameters-by-path-result.ts";
+import { basePath, result1 } from "./__mocks__/get-parameters-by-path-result";
 import {vi, describe, it, expect } from 'vitest'
 
 vi.mock("./ssm-parameters", () => {

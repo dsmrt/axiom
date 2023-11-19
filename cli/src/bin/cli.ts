@@ -1,8 +1,8 @@
 #!/usr/bin/env -S ts-node --esm --preferTsExts
 
 import yargs from "yargs/yargs";
-import { ParamsCommand }  from "../commands/params/base.ts"
-import { Config } from "../commands/config.ts"
+import { ParamsCommand }  from "../commands/params/base"
+import { Config } from "../commands/config"
 
 yargs(process.argv.slice(2))
 .env('AXIOM')

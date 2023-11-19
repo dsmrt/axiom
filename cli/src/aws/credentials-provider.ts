@@ -8,7 +8,7 @@ import {
 import { AwsCredentialIdentity, AwsCredentialIdentityProvider } from "@aws-sdk/types";
 import { AwsConfigs, Config } from "axiom-config";
 import inquirer from "inquirer";
-import Cache from "../cache.ts";
+import Cache from "../cache";
 
 const CACHE_KEY_PREFIX = "axiom#aws-credentials";
 const cache = new Cache();

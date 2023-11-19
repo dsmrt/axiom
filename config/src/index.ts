@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs'
-import { findUpSync } from 'find-up'
+import { sync as findUpSync } from 'find-up'
 
 export interface AwsConfigs {
     account: string;
@@ -29,18 +29,15 @@ export interface LoadConfigInput {
     cwd?: string;
 }
 
-export const importConfigFromPath = (path: string): any => {
+// TODO - Add validation here
+export const importConfigFromPath = (path: string): Config => {
   if (/\.json$/.test(path)) {
     return JSON.parse(
       readFileSync(path).toString()
-    )
+    ) as Config
   }
-  if (/\.js$/.test(path)) {
-    return require(require.resolve(path))
-  }
-
-  if (/\.ts$/.test(path)) {
-    return require(require.resolve(path))
+  if (/\.(m)?[j|t]s$/.test(path)) {
+    return require(path) as Config
   }
 
   throw new Error(`Path not found: {path}`)
@@ -56,7 +53,6 @@ export const loadConfig = (input?: LoadConfigInput): Config => {
 
     // get the environment file 
     if(input?.env) {
-        console.log(input?.env)
         const devConfig = importConfigFromPath(configPath(input))
         overrides = {...devConfig, ...overrides,}
     }
@@ -69,7 +65,9 @@ export const configPath = (input?: LoadConfigInput): string => {
     const p = findUpSync([
         `.axiom${envIndicator}.json`,
         `.axiom${envIndicator}.js`,
+        `.axiom${envIndicator}.mjs`,
         `.axiom${envIndicator}.ts`,
+        `.axiom${envIndicator}.mts`,
     ], { cwd: input?.cwd })
 
     if(p === undefined)

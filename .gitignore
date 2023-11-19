@@ -1,3 +1,6 @@
+# axiom config files (while testing)
+/.axiom(\.\S+)?\.(m)?[t|j]s(on)?
+
 # Logs
 logs
 *.log

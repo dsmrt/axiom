@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "",
   "main": "bin/cli.ts",
-  "type": "module",
+  "bin": {
+    "axiom": "./src/bin/cli.ts"
+  },
   "scripts": {
     "test": "vitest",
     "coverage": "vitest watch --coverage"
@@ -12,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/inquirer": "^9.0.7",
+    "@types/inquirer": "^8.0.0",
     "@types/node": "^20.9.0",
     "@types/yargs": "^17.0.31",
     "@vitest/coverage-v8": "^0.34.6",
@@ -27,8 +29,8 @@
     "@aws-sdk/types": "^3.451.0",
     "axiom-aws-sdk": "workspace:^",
     "axiom-config": "workspace:^",
-    "chalk": "^5.3.0",
-    "inquirer": "^9.2.12",
+    "chalk": "^4.1.2",
+    "inquirer": "^8.0.0",
     "yargs": "^17.7.2"
   }
 }

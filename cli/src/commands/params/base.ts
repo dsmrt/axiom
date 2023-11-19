@@ -1,5 +1,5 @@
 import { CommandModule, Argv, ArgumentsCamelCase } from 'yargs'
-import { Get, } from './get.ts'
+import { DeleteCommand, GetCommand, SetCommand } from '.'
 
 
 interface Options {}
@@ -11,7 +11,13 @@ export class ParamsCommand<U extends Options> implements CommandModule<{}, U> {
   builder = (args: Argv): Argv<U> => {
     args.demandCommand()
       .command(
-        new Get
+        new GetCommand
+      )
+      .command(
+        new SetCommand
+      )
+      .command(
+        new DeleteCommand
       )
     return args as unknown as Argv<U>
   }

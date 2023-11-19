@@ -1,2 +1,2 @@
-export * from "./config.ts"
-export * from "./params/index.ts"
+export * from "./config"
+export * from "./params/index"
