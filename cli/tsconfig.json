@@ -4,7 +4,11 @@
     "module": "nodenext",
     "strict": true,
     "esModuleInterop": true,
-    "moduleResolution": "nodenext"
+    "moduleResolution": "nodenext",
+    "allowImportingTsExtensions": true
   },
-  "include": ["cli.ts"]
+  "include": [
+      "src/**/*.ts"
+
+  ]
 }

@@ -1,18 +1,17 @@
 {
-  "name": "axiom-config",
+  "name": "axiom-aws-sdk",
   "version": "0.0.1",
   "description": "",
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "test": "vitest",
-    "converage": "vitest run --coverage"
+    "test": "vitest --config ../vitest.config.ts",
+    "coverage": "vitest watch --coverage --config ../vitest.config.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/yargs": "^17.0.31",
     "@types/node": "^20.9.0",
     "@vitest/coverage-v8": "^0.34.6",
     "ts-node": "^10.9.1",
@@ -20,7 +19,9 @@
     "vitest": "^0.34.6"
   },
   "dependencies": {
-    "find-up": "^6.3.0",
-    "yargs": "^17.7.2"
+    "@aws-sdk/client-ssm": "^3.451.0",
+    "@aws-sdk/client-sts": "^3.454.0",
+    "@aws-sdk/credential-providers": "^3.454.0",
+    "@aws-sdk/types": "^3.451.0"
   }
 }

@@ -1,15 +1,17 @@
 import { readFileSync } from 'fs'
 import { findUpSync } from 'find-up'
 
+export interface AwsConfigs {
+    account: string;
+    region: string;
+    profile: string;
+    baseParameterPath: string;
+}
+
 export interface Config {
     name: string;
     env: string;
-    aws: {
-        account: string;
-        region: string;
-        profile: string;
-        baseParameterPath: string;
-    }
+    aws: AwsConfigs;
 }
 
 export interface LoadConfigInput {
@@ -28,7 +30,6 @@ export interface LoadConfigInput {
 }
 
 export const importConfigFromPath = (path: string): any => {
-  let config: Config
   if (/\.json$/.test(path)) {
     return JSON.parse(
       readFileSync(path).toString()
@@ -45,7 +46,7 @@ export const importConfigFromPath = (path: string): any => {
   throw new Error(`Path not found: {path}`)
 }
 
-export const loadConfig = (input?: LoadConfigInput) => {
+export const loadConfig = (input?: LoadConfigInput): Config => {
     // get the base file
     const baseConfigFile = configPath(input)
 

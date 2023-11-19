@@ -1,19 +1,24 @@
-#!/usr/bin/env -S ts-node --preferTsExts
+#!/usr/bin/env -S ts-node --esm --preferTsExts
 
-import yargs, { Argv } from "yargs";
+import yargs from "yargs/yargs";
+import { ParamsCommand }  from "../commands/params/base.ts"
+import { Config } from "../commands/config.ts"
 
-const axiom = async (yargs: Argv<{}>) => {
-    yargs
-        .env('AXIOM')
-        .scriptName('axiom')
-        .option('config', {
-                alias: 'c',
-                string: true,
-                default: __dirname
-        }).usage(`
+yargs(process.argv.slice(2))
+.env('AXIOM')
+.scriptName('axiom')
+.option('config', {
+    alias: 'c',
+    string: true,
+})
+.command(new Config)
+.command(new ParamsCommand)
+.usage(`
+Axiom - an AWS focused config cli
+
 USAGE:
-  $0 [options] <command>
-`)
-}
-
-axiom(yargs)
+           $0 [options] <command>
+       `)
+        .demandCommand(1, '')
+        .alias('h', 'help')
+        .argv
