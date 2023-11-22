@@ -1,8 +1,16 @@
 {
     "name": "axiom-config",
     "version": "0.0.1",
-    "description": "",
+    "description": "Config library for axiom cli",
     "main": "lib/index.js",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:dsmrt/axiom.git",
+        "directory": "config"
+    },
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/"
+    },
     "scripts": {
         "lint": "eslint ./src/ --ext .ts",
         "lint:fix": "eslint ./src/ --ext .ts --fix",
@@ -10,8 +18,11 @@
         "watch": "vitest watch --coverage",
         "build": "tsc -d -p ./tsconfig.json"
     },
-    "keywords": [],
-    "author": "",
+    "keywords": ["axiom","config","aws"],
+    "author": {
+        "name": "Damien Smrt",
+        "url": "https://dsmrt.com"
+    },
     "license": "MIT",
     "devDependencies": {
         "@types/node": "^20.9.0",

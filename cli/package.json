@@ -1,11 +1,19 @@
 {
     "name": "axiom-cli",
     "version": "0.0.1",
-    "description": "",
+    "description": "axiom cli for managing configs including secrets",
     "main": "lib/bin/axiom.js",
     "types": "lib/index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:dsmrt/axiom.git",
+        "directory": "cli"
+    },
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/"
+    },
     "bin": {
-        "axiom": "./src/bin/axiom.ts"
+        "axiom": "./lib/bin/axiom.js"
     },
     "scripts": {
         "lint": "eslint ./src/ --ext .ts",
@@ -14,8 +22,11 @@
         "watch": "vitest watch --coverage",
         "build": "tsc -d -p ./tsconfig.json"
     },
-    "keywords": [],
-    "author": "",
+    "keywords": ["axiom", "config", "aws", "cli"],
+    "author": {
+        "name": "Damien Smrt",
+        "url": "https://dsmrt.com"
+    },
     "license": "MIT",
     "devDependencies": {
         "@types/inquirer": "^8.0.0",
