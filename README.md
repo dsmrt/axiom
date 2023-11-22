@@ -1,6 +1,12 @@
 # Axiom
 An AWS focused config manager
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./images/axiom-dark-mode.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./images/axiom-light-mode.svg">
+  <img alt="Axiom logo" src="./images/axiom-light-mode.svg">
+</picture>
+
 ## Packages
 
 - `@dsmrt/axiom-cli`
