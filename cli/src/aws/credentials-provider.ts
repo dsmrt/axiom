@@ -6,7 +6,7 @@ import {
   AssumeRoleCommandInput,
 } from "@aws-sdk/client-sts";
 import { AwsCredentialIdentity, AwsCredentialIdentityProvider } from "@aws-sdk/types";
-import { AwsConfigs, Config } from "axiom-config";
+import { AwsConfigs, } from "axiom-config";
 import inquirer from "inquirer";
 import Cache from "../cache";
 

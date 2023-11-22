@@ -4,14 +4,14 @@ import fs from 'fs'
 const DEFAULT_DIRECTORY = `${os.homedir()}/.axiom/cache`
 
 export interface Item {
-  expires?: Date
-  data: any
+  expires?: Date;
+  data: unknown
 }
 
 export default class {
   constructor(private cacheDir: string = DEFAULT_DIRECTORY) { }
 
-  get<T = {}>(name: string): T | undefined {
+  get<T = object>(name: string): T | undefined {
     const file = `${this.cacheDir}/${name}`
     /**
      * does this item exist?
@@ -30,7 +30,7 @@ export default class {
      * Just return it
      */
     if (item.expires === undefined) {
-      return item.data
+      return item.data as T
     }
 
     item.expires = new Date(item.expires)
@@ -52,7 +52,7 @@ export default class {
     )
   }
 
-  set(name: string, value: any, expires?: Date): void {
+  set(name: string, value: unknown, expires?: Date): void {
     if (!fs.existsSync(this.cacheDir)) {
       fs.mkdirSync(this.cacheDir, {
         recursive: true,

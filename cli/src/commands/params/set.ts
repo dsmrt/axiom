@@ -15,7 +15,7 @@ interface Options extends AwsConfigs {
     overwrite: boolean;
 }
 
-export class SetCommand<U extends Options> implements CommandModule<{}, U> {
+export class SetCommand<U extends Options> implements CommandModule<object, U> {
     public command = 'set <path> <value>'
     public describe = 'Set all parameters under the base path'
 
@@ -24,8 +24,7 @@ export class SetCommand<U extends Options> implements CommandModule<{}, U> {
         args.positional('path', {
             type: 'string',
             describe: `Path to parameter. Supports absolute and relative paths.` +
-                // @ts-ignore
-                `\nExample: "/root/myParam" or "service/secret" (which translates to, "${buildPath(config as Option & Config, "service/secret")})`,
+                `\nExample: "/root/myParam" or "service/secret" (which translates to, "${buildPath(config, "service/secret")})`,
             // default: config.awsSsmParameterPath,
             // demandOption: 'Path is required',
         })

@@ -14,7 +14,7 @@ interface Options {
 
 type config = Config & Options
 
-export class DeleteCommand<U extends config> implements CommandModule<{}, U> {
+export class DeleteCommand<U extends config> implements CommandModule<object, U> {
   public command = 'delete <path>'
   public describe = 'Delete SSM parameters'
 
@@ -24,8 +24,7 @@ export class DeleteCommand<U extends config> implements CommandModule<{}, U> {
     args.positional('path', {
       type: 'string',
       describe: `Path to parameter. Supports absolute and relative paths.` +
-        // @ts-ignore
-        `\nExample: "/root/myParam" or "service/secret" (which translates to, "${buildPath(config as Option & Config, "service/secret")})`,
+        `\nExample: "/root/myParam" or "service/secret" (which translates to, "${buildPath(config, "service/secret")})`,
       default: config.aws?.baseParameterPath,
       demandOption: true
     })

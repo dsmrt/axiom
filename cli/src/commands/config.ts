@@ -1,11 +1,11 @@
-import { CommandModule, Argv, Options, ArgumentsCamelCase } from 'yargs'
+import { CommandModule, Argv, ArgumentsCamelCase } from 'yargs'
 import { loadConfig } from 'axiom-config'
 
 interface ConfigOptions {
     env: string;
 }
 
-export class Config<U extends ConfigOptions> implements CommandModule<{}, U> {
+export class Config<U extends ConfigOptions> implements CommandModule<object, U> {
   public command = 'config'
   public describe = 'print the config'
 

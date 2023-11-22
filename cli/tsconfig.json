@@ -7,8 +7,5 @@
     "moduleResolution": "node16",
     "outDir": "lib"
   },
-  "include": [
-      "src/**/*.ts"
-
-  ]
+  "include": ["src/index.ts"]
 }

@@ -7,11 +7,9 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 const MOCK_AXIOM_JSON_CONFIG_DIR = __dirname + '__mocks__/json/'
 const MOCK_AXIOM_JSON_CONFIG_DEV = __dirname + '__mocks__/json/.axiom.dev.json'
-const MOCK_AXIOM_JSON_CONFIG_PROD = __dirname + '__mocks__/json/.axiom.json'
 
 const MOCK_AXIOM_JS_CONFIG_DIR = __dirname + '__mocks__/js/'
 const MOCK_AXIOM_JS_CONFIG_DEV = __dirname + '__mocks__/js/.axiom.dev.js'
-const MOCK_AXIOM_JS_CONFIG_PROD = __dirname + '__mocks__/js/.axiom.js'
 
 describe('load configs', () => {
 

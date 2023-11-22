@@ -1,10 +1,10 @@
-import { CommandModule, Argv, ArgumentsCamelCase } from 'yargs'
+import { CommandModule, Argv, } from 'yargs'
 import { DeleteCommand, GetCommand, SetCommand } from '.'
 
 
 interface Options {}
 
-export class ParamsCommand<U extends Options> implements CommandModule<{}, U> {
+export class ParamsCommand<U extends Options> implements CommandModule<object, U> {
   public command = 'params'
   public describe = 'Manage SSM parameters'
 
@@ -21,7 +21,7 @@ export class ParamsCommand<U extends Options> implements CommandModule<{}, U> {
       )
     return args as unknown as Argv<U>
   }
-  public handler = async (args: ArgumentsCamelCase<U>) => {
+  public handler = async () => {
     // Is this needed?
     console.log("👍")
   }

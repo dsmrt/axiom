@@ -1,2 +1,2 @@
 export * from "./config"
-export * from "./params/index"
+export * from "./params"

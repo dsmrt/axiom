@@ -11,10 +11,6 @@ vi.mock("./ssm-parameters", () => {
   };
 });
 
-type CollectionParams = {
-  one: string;
-};
-
 describe("Parameter Collection", () => {
   it("Should create collection successfully", async () => {
     const path = "/foo/bar/baz";

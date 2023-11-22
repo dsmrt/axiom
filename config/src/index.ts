@@ -16,31 +16,32 @@ export interface Config {
 
 export interface LoadConfigInput {
     /**
-     * defaults to prod
-     */
+        * defaults to prod
+    */
     env?: string;
     /**
-     * Override configs
-     */
+        * Override configs
+    */
     overrides?: Config;
     /**
-     * Load config from a sub directory
-     */
+        * Load config from a sub directory
+    */
     cwd?: string;
 }
 
 // TODO - Add validation here
 export const importConfigFromPath = (path: string): Config => {
-  if (/\.json$/.test(path)) {
-    return JSON.parse(
-      readFileSync(path).toString()
-    ) as Config
-  }
-  if (/\.(m)?[j|t]s$/.test(path)) {
-    return require(path) as Config
-  }
+    if (/\.json$/.test(path)) {
+        return JSON.parse(
+            readFileSync(path).toString()
+        ) as Config
+    }
+    if (/\.(m)?[j|t]s$/.test(path)) {
+        /* eslint-disable */
+            return require(path) as Config
+    }
 
-  throw new Error(`Path not found: {path}`)
+    throw new Error(`Path not found: {path}`)
 }
 
 export const loadConfig = (input?: LoadConfigInput): Config => {

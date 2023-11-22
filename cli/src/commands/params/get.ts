@@ -13,7 +13,7 @@ interface Options extends AwsConfigs {
     path: string;
 }
 
-export class GetCommand<U extends Options> implements CommandModule<{}, U> {
+export class GetCommand<U extends Options> implements CommandModule<object, U> {
   public command = 'get [path]'
   public describe = 'Get all parameters under the base path'
 
@@ -23,8 +23,7 @@ export class GetCommand<U extends Options> implements CommandModule<{}, U> {
     args.positional('path', {
       type: 'string',
       describe: `OPTIONAL path to parameter. Supports absolute and relative paths.` +
-        // @ts-ignore
-        `\nExample: "/root/myParam" or "service/secret" (which translates to, "${buildPath(config as Option & Config, "service/secret")})`,
+        `\nExample: "/root/myParam" or "service/secret" (which translates to, "${buildPath(config, "service/secret")})`,
       // default: config.awsSsmParameterPath,
     })
 
@@ -50,7 +49,7 @@ export class GetCommand<U extends Options> implements CommandModule<{}, U> {
 
     const params = await collection.get()
 
-    params.forEach((parameter: Parameter, key: string | number) => {
+    params.forEach((parameter: Parameter,) => {
       console.log(
         chalk.gray(
           parameter.Name?.replace(/\/([^/]+)$/, '/' + chalk.bold.green('$1'))

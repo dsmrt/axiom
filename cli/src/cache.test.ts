@@ -1,7 +1,7 @@
 import Cache, { Item } from './cache'
 import { describe, it, expect, vi } from 'vitest'
 import fs from 'fs'
-vi.mock('node:fs')
+vi.mock('fs')
 
 vi.mocked(fs.unlinkSync).mockReturnValue(undefined)
 
@@ -14,9 +14,11 @@ describe('get', () => {
       },
     }
 
-    //@ts-ignore
+    /* eslint-disable */
+    // @ts-ignore
     fs.existsSync.mockReturnValue(true)
-    //@ts-ignore
+    /* eslint-disable*/
+    // @ts-ignore
     fs.readFileSync.mockReturnValue(
       Buffer.from(JSON.stringify(item), 'utf-8')
     )
@@ -41,8 +43,10 @@ describe('get', () => {
       expires: new Date('2050-01-01T00:00:00'),
     }
 
+    /* eslint-disable*/
     //@ts-ignore
     fs.existsSync.mockReturnValue(true)
+    /* eslint-disable*/
     //@ts-ignore
     fs.readFileSync.mockReturnValue(
       Buffer.from(JSON.stringify(item), 'utf-8')
