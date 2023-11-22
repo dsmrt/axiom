@@ -5,8 +5,11 @@ import {
   Credentials as AssumeRoleResponseCreds,
   AssumeRoleCommandInput,
 } from "@aws-sdk/client-sts";
-import { AwsCredentialIdentity, AwsCredentialIdentityProvider } from "@aws-sdk/types";
-import { AwsConfigs, } from "axiom-config";
+import {
+  AwsCredentialIdentity,
+  AwsCredentialIdentityProvider,
+} from "@aws-sdk/types";
+import { AwsConfigs } from "axiom-config";
 import inquirer from "inquirer";
 import Cache from "../cache";
 
@@ -15,7 +18,7 @@ const cache = new Cache();
 
 const CachedCredentialViaProfileAndRegion = async (
   profile: string,
-  region?: string
+  region?: string,
 ): Promise<AwsCredentialIdentityProvider> => {
   const cacheKeyName = `${CACHE_KEY_PREFIX}#${profile}`;
 
@@ -38,7 +41,7 @@ const CachedCredentialViaProfileAndRegion = async (
     profile,
     roleAssumer: async (
       sourceCreds: AwsCredentialIdentity,
-      params: AssumeRoleCommandInput
+      params: AssumeRoleCommandInput,
     ): Promise<AwsCredentialIdentity> => {
       const command = new AssumeRoleCommand(params);
 
@@ -60,7 +63,7 @@ const CachedCredentialViaProfileAndRegion = async (
       cache.set(
         cacheKeyName,
         result.Credentials,
-        result.Credentials.Expiration
+        result.Credentials.Expiration,
       );
 
       return {
@@ -82,7 +85,7 @@ const CachedCredentialViaProfileAndRegion = async (
 };
 
 const CachedCredentialProvider = (
-  config: AwsConfigs
+  config: AwsConfigs,
 ): Promise<AwsCredentialIdentityProvider> => {
   return CachedCredentialViaProfileAndRegion(config.profile, config.region);
 };

@@ -3,9 +3,9 @@ import {
   Parameter,
   GetParametersByPathCommand,
   GetParametersCommand,
-} from '@aws-sdk/client-ssm'
+} from "@aws-sdk/client-ssm";
 
-export const ssmClient = new SSMClient({})
+export const ssmClient = new SSMClient({});
 
 // to use this, you need to give the lambda function permission to the
 // ** CloudFormation Example **
@@ -25,42 +25,33 @@ export const getParametersByPath = async (
   path: string,
   parameters?: Parameter[],
   nextToken?: string,
-  client?: SSMClient
+  client?: SSMClient,
 ): Promise<Parameter[]> => {
+  client ??= ssmClient;
 
-  client ??= ssmClient
-
-  let returnParams: Parameter[] = parameters || []
+  let returnParams: Parameter[] = parameters || [];
 
   const command = new GetParametersByPathCommand({
     Path: path,
     Recursive: true,
     WithDecryption: true,
     NextToken: nextToken,
-  })
+  });
 
-  const output = await client.send(command)
+  const output = await client.send(command);
 
   // merge parameters
   if (output.Parameters !== undefined) {
-    returnParams = [
-      ...returnParams,
-      ...output.Parameters
-    ]
+    returnParams = [...returnParams, ...output.Parameters];
   }
 
   if (output.NextToken !== undefined) {
-    return getParametersByPath(
-      path,
-      returnParams,
-      output.NextToken,
-      client
-    )
+    return getParametersByPath(path, returnParams, output.NextToken, client);
   }
 
   // return all
   return returnParams;
-}
+};
 
 // ** CloudFormation Example **
 // Resources:
@@ -80,23 +71,22 @@ export const getParametersByPath = async (
 //           - ${name3
 export const getParameters = async (
   names: string[],
-  client?: SSMClient
+  client?: SSMClient,
 ): Promise<Parameter[]> => {
-
-  client ??= ssmClient
+  client ??= ssmClient;
 
   const command = new GetParametersCommand({
     Names: names,
     WithDecryption: true,
-  })
+  });
 
-  const result = await client.send(command)
+  const result = await client.send(command);
   if (result.Parameters === undefined) {
-    return []
+    return [];
   }
 
-  return result.Parameters
-}
+  return result.Parameters;
+};
 
 /**
  * Extract a single parameter from an array of params (typically from params by path)
@@ -107,9 +97,9 @@ export const getParameters = async (
 export const extractParamValue = (
   path: string,
   name: string,
-  params: Parameter[]
+  params: Parameter[],
 ): string => {
-  const fullName = `${path.replace(/\/$/, '')}/${name}`;
+  const fullName = `${path.replace(/\/$/, "")}/${name}`;
 
   const item = params.find((item) => item.Name === fullName);
 
@@ -118,4 +108,4 @@ export const extractParamValue = (
   }
 
   return item.Value;
-}
+};

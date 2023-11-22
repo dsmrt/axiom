@@ -1,7 +1,7 @@
 import { ParameterCollection } from "./ssm-parameter-collection";
 import { Parameter } from "@aws-sdk/client-ssm";
 import { basePath, result1 } from "./__mocks__/get-parameters-by-path-result";
-import {vi, describe, it, expect } from 'vitest'
+import { vi, describe, it, expect } from "vitest";
 
 vi.mock("./ssm-parameters", () => {
   return {
@@ -34,8 +34,8 @@ describe("Parameter Collection", () => {
 
   it("findParam should return a proper value", async () => {
     const collection = new ParameterCollection(basePath);
-    const one = await collection.findParam("one")
-    const foo = await collection.findParam("foo")
+    const one = await collection.findParam("one");
+    const foo = await collection.findParam("foo");
 
     expect(one?.Value).toBe("one");
     expect(foo?.Value).toBe(undefined);

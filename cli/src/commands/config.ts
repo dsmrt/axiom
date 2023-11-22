@@ -1,22 +1,23 @@
-import { CommandModule, Argv, ArgumentsCamelCase } from 'yargs'
-import { loadConfig } from 'axiom-config'
+import { CommandModule, Argv, ArgumentsCamelCase } from "yargs";
+import { loadConfig } from "axiom-config";
 
 interface ConfigOptions {
-    env: string;
+  env: string;
 }
 
-export class Config<U extends ConfigOptions> implements CommandModule<object, U> {
-  public command = 'config'
-  public describe = 'print the config'
+export class Config<U extends ConfigOptions>
+  implements CommandModule<object, U>
+{
+  public command = "config";
+  public describe = "print the config";
 
   public builder = (args: Argv): Argv<U> => {
-    return args as unknown as Argv<U>
-  }
+    return args as unknown as Argv<U>;
+  };
 
   public handler = async (args: ArgumentsCamelCase<U>) => {
+    const config = loadConfig({ env: args.env });
 
-    const config = loadConfig({ env: args.env })
-
-    console.log(config)
-  }
+    console.log(config);
+  };
 }
