@@ -2,4 +2,3 @@ packages:
   - aws-sdk
   - cli
   - config
-  - example-app

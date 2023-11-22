@@ -1,6 +1,10 @@
 # axiom config files (while testing)
 /.axiom(\.\S+)?\.(m)?[t|j]s(on)?
 
+# don't commit js files
+/**/*\.js
+/**/*\.d\.ts
+
 # Logs
 logs
 *.log

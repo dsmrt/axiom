@@ -4,9 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "pnpm run -r --if-present test",
+    "build": "pnpm run -r --if-present build"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "lerna": "^7.4.2"
+  }
 }

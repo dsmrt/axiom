@@ -4,12 +4,13 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "test": "vitest",
-    "coverage": "vitest watch --coverage"
+    "test": "vitest run --coverage",
+    "watch": "vitest watch --coverage",
+    "build": "tsc -d -p ./tsconfig.json"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.9.0",
     "@vitest/coverage-v8": "^0.34.6",
