@@ -4,7 +4,7 @@
   "aws": {
     "account": "dev-account",
     "profile": "dev-profile",
-    "region": "us-east-1",
+    "region": "us-north-1",
     "baseParameterPath": "/dev-path"
   }
 }

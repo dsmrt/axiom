@@ -53,11 +53,40 @@ export const loadConfig = (input?: LoadConfigInput): Config => {
   // get the environment file
   if (input?.env) {
     const devConfig = importConfigFromPath(configPath(input));
-    overrides = { ...devConfig, ...overrides };
+    overrides = mergeDeep(devConfig, overrides);
   }
+
   // merge env file
-  return { ...baseConfig, ...overrides };
+  return mergeDeep(baseConfig, overrides);
 };
+
+/**
+ * Simple object check.
+ */
+export function isObject(item: unknown) {
+  return item && typeof item === "object" && !Array.isArray(item);
+}
+
+/**
+ * Deep merge two objects.
+ */
+export function mergeDeep(target: any, ...sources: any[]) {
+  if (!sources.length) return target;
+  const source = sources.shift();
+
+  if (isObject(target) && isObject(source)) {
+    for (const key in source) {
+      if (isObject(source[key])) {
+        if (!target[key]) Object.assign(target, { [key]: {} });
+        mergeDeep(target[key], source[key]);
+      } else {
+        Object.assign(target, { [key]: source[key] });
+      }
+    }
+  }
+
+  return mergeDeep(target, ...sources);
+}
 
 export const configPath = (input?: LoadConfigInput): string => {
   const envIndicator = input?.env ? `.${input.env}` : "";

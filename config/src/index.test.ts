@@ -26,6 +26,20 @@ describe("load configs", () => {
     expect(jsConfig.env).toBe("prod");
   });
 
+  it("override basic config dev", () => {
+    const jsonConfig = loadConfig({
+      env: "dev",
+      cwd: MOCK_AXIOM_JSON_CONFIG_DIR,
+    });
+
+    expect(jsonConfig.env).toBe("dev");
+    expect(jsonConfig.aws.region).toBe("us-north-1");
+
+    const jsConfig = loadConfig({ cwd: MOCK_AXIOM_JS_CONFIG_DIR });
+
+    expect(jsConfig.env).toBe("prod");
+  });
+
   it("load prod env basic config", () => {
     const jsonConfig = loadConfig({ cwd: MOCK_AXIOM_JSON_CONFIG_DIR });
 
