@@ -12,6 +12,7 @@ yargs(process.argv.slice(2))
   })
   .command(new Config())
   .command(new ParamsCommand())
+  .strict()
   .usage(
     `
 Axiom - an AWS focused config cli
