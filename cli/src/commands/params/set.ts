@@ -1,5 +1,5 @@
 import { CommandModule, Argv, ArgumentsCamelCase } from "yargs";
-import { loadConfig, AwsConfigs } from "axiom-config";
+import { loadConfig, AwsConfigs } from "@dsmrt/axiom-config";
 import {
   SSMClient,
   PutParameterCommand,

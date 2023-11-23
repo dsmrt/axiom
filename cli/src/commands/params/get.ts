@@ -1,6 +1,6 @@
 import { CommandModule, Argv, ArgumentsCamelCase } from "yargs";
-import { loadConfig, AwsConfigs } from "axiom-config";
-import { ParameterCollection } from "axiom-aws-sdk";
+import { loadConfig, AwsConfigs } from "@dsmrt/axiom-config";
+import { ParameterCollection } from "@dsmrt/axiom-aws-sdk";
 import { SSMClient, Parameter } from "@aws-sdk/client-ssm";
 import { CachedCredentialProvider } from "../../aws/credentials-provider";
 import { awsOptions, commonOptions } from "../../options";

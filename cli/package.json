@@ -46,8 +46,8 @@
         "@aws-sdk/client-sts": "^3.454.0",
         "@aws-sdk/credential-providers": "^3.454.0",
         "@aws-sdk/types": "^3.451.0",
-        "axiom-aws-sdk": "workspace:^",
-        "axiom-config": "workspace:^",
+        "@dsmrt/axiom-aws-sdk": "workspace:^",
+        "@dsmrt/axiom-config": "workspace:^",
         "chalk": "^4.1.2",
         "inquirer": "^8.0.0",
         "yargs": "^17.7.2"

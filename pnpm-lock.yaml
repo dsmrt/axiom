@@ -69,10 +69,10 @@ importers:
       '@aws-sdk/types':
         specifier: ^3.451.0
         version: 3.451.0
-      axiom-aws-sdk:
+      '@dsmrt/axiom-aws-sdk':
         specifier: workspace:^
         version: link:../aws-sdk
-      axiom-config:
+      '@dsmrt/axiom-config':
         specifier: workspace:^
         version: link:../config
       chalk:

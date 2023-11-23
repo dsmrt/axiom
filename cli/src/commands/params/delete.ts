@@ -1,5 +1,5 @@
 import { CommandModule, Argv, ArgumentsCamelCase } from "yargs";
-import { Config, loadConfig } from "axiom-config";
+import { Config, loadConfig } from "@dsmrt/axiom-config";
 import inquirer from "inquirer";
 import { SSMClient, DeleteParameterCommand } from "@aws-sdk/client-ssm";
 import { buildPath } from "./utils";

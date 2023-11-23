@@ -1,4 +1,4 @@
-#!/usr/bin/env -S ts-node --preferTsExts
+#!/usr/bin/env node
 
 import yargs from "yargs";
 import { ParamsCommand, Config } from "../commands";

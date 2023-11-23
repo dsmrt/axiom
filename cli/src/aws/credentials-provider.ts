@@ -9,7 +9,7 @@ import {
   AwsCredentialIdentity,
   AwsCredentialIdentityProvider,
 } from "@aws-sdk/types";
-import { AwsConfigs } from "axiom-config";
+import { AwsConfigs } from "@dsmrt/axiom-config";
 import inquirer from "inquirer";
 import Cache from "../cache";
 

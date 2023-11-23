@@ -1,4 +1,4 @@
-import { Config } from "axiom-config";
+import { Config } from "@dsmrt/axiom-config";
 
 export const buildPath = (config: Config, path?: string) => {
   if (path === undefined) {
