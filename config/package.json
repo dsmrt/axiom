@@ -1,5 +1,5 @@
 {
-    "name": "axiom-config",
+    "name": "@dsmrt/axiom-config",
     "version": "0.0.1",
     "description": "Config library for axiom cli",
     "main": "lib/index.js",

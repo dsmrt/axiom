@@ -1,5 +1,5 @@
 {
-    "name": "axiom-cli",
+    "name": "@dsmrt/axiom-cli",
     "version": "0.0.1",
     "description": "axiom cli for managing configs including secrets",
     "main": "lib/bin/axiom.js",
