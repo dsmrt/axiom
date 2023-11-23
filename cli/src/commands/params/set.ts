@@ -1,5 +1,6 @@
 import { CommandModule, Argv, ArgumentsCamelCase } from "yargs";
 import { loadConfig, AwsConfigs } from "@dsmrt/axiom-config";
+import inquirer from "inquirer";
 import {
   SSMClient,
   PutParameterCommand,
@@ -14,6 +15,7 @@ interface Options extends AwsConfigs {
   env: string;
   path: string;
   value: string;
+  force: boolean;
   secure: boolean;
   overwrite: boolean;
 }
@@ -33,8 +35,6 @@ export class SetCommand<U extends Options> implements CommandModule<object, U> {
             config,
             "service/secret",
           )})`,
-        // default: config.awsSsmParameterPath,
-        // demandOption: 'Path is required',
       })
       .demandOption("path", "Path is required");
     args
@@ -43,6 +43,12 @@ export class SetCommand<U extends Options> implements CommandModule<object, U> {
         demandOption: "value is required",
       })
       .demandOption("value", "Value is required");
+    args.option("force", {
+      boolean: true,
+      default: false,
+      describe: "force set parameter without prompt",
+      alias: "f",
+    });
     args.option("secure", {
       boolean: true,
       default: true,
@@ -59,6 +65,19 @@ export class SetCommand<U extends Options> implements CommandModule<object, U> {
 
   public handler = async (args: ArgumentsCamelCase<U>) => {
     const config = loadConfig({ env: args.env });
+
+    if (args.force !== true) {
+      const res = await inquirer.prompt({
+        type: "confirm",
+        name: "setParam",
+        message: `Are you sure you want to set '${args.path}'?`,
+      });
+
+      if (!res.setParam) {
+        console.log("Doing nothing.");
+        return;
+      }
+    }
 
     const client = new SSMClient({
       region: config.aws.region,

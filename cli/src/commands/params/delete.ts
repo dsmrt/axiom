@@ -10,6 +10,7 @@ type Path = string;
 
 interface Options {
   path?: Path;
+  force: boolean;
 }
 
 type config = Config & Options;
@@ -36,6 +37,12 @@ export class DeleteCommand<U extends config>
         demandOption: true,
       })
       .demandOption("path", "Path is required");
+    args.option("force", {
+      boolean: true,
+      default: false,
+      describe: "force delete parameter without prompt",
+      alias: "f",
+    });
     return args as unknown as Argv<U>;
   };
 
@@ -53,15 +60,17 @@ export class DeleteCommand<U extends config>
       );
     }
 
-    const res = await inquirer.prompt({
-      type: "confirm",
-      name: "delete",
-      message: `Are you sure you want to delete '${path}'?`,
-    });
+    if (args.force !== true) {
+      const res = await inquirer.prompt({
+        type: "confirm",
+        name: "delete",
+        message: `Are you sure you want to delete '${path}'?`,
+      });
 
-    if (!res.delete) {
-      log("Doing nothing.");
-      return;
+      if (!res.delete) {
+        log("Doing nothing.");
+        return;
+      }
     }
 
     await client.send(
