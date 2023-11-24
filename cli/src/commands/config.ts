@@ -11,13 +11,11 @@ export class Config<U extends ConfigOptions>
   public command = "config";
   public describe = "print the config";
 
-  public builder = (args: Argv): Argv<U> => {
-    return args as unknown as Argv<U>;
+  public handler = async (args: ArgumentsCamelCase<U>) => {
+    console.log(await this.loadConfig(args));
   };
 
-  public handler = async (args: ArgumentsCamelCase<U>) => {
-    const config = loadConfig({ env: args.env });
-
-    console.log(config);
+  public loadConfig = async (args: ConfigOptions) => {
+    return loadConfig(args);
   };
 }

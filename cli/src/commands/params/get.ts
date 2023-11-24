@@ -18,7 +18,7 @@ export class GetCommand<U extends Options> implements CommandModule<object, U> {
 
   public builder = (args: Argv): Argv<U> => {
     const config = loadConfig();
-    args = commonOptions(awsOptions(args));
+    args.options({ ...commonOptions(), ...awsOptions() });
     args.positional("path", {
       type: "string",
       describe:

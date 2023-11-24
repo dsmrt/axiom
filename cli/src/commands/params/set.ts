@@ -60,7 +60,10 @@ export class SetCommand<U extends Options> implements CommandModule<object, U> {
       describe: "Overwrite parameter if it already exists",
     });
 
-    return commonOptions(awsOptions(args)) as unknown as Argv<U>;
+    return args.options({
+      ...commonOptions(),
+      ...awsOptions(),
+    }) as unknown as Argv<U>;
   };
 
   public handler = async (args: ArgumentsCamelCase<U>) => {

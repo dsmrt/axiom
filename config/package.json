@@ -14,8 +14,8 @@
     "scripts": {
         "lint": "eslint ./src/ --ext .ts",
         "lint:fix": "eslint ./src/ --ext .ts --fix",
-        "test": "vitest run --coverage",
-        "watch": "vitest watch --coverage",
+        "test": "vitest run --coverage -c ./vitest.config.ts",
+        "watch": "vitest watch --coverage -c ./vitest.config.ts",
         "build": "tsc -d -p ./tsconfig.json"
     },
     "keywords": ["axiom","config","aws"],
