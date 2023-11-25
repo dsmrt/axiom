@@ -42,7 +42,9 @@ export const importConfigFromPath = (path: string): Config => {
   throw new Error(`Path not found: {path}`);
 };
 
-export const loadConfig = (input?: LoadConfigInput): Config => {
+export const loadConfig = <T extends object>(
+  input?: LoadConfigInput,
+): Config & T => {
   // get the base file
   const baseConfigFile = configPath(input);
 

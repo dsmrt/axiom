@@ -8,12 +8,12 @@ import { CachedCredentialProvider } from "../../aws/credentials-provider";
 const log = console.log;
 type Path = string;
 
-interface Options {
+export interface DeleteOptions {
   path?: Path;
   force: boolean;
 }
 
-type config = Config & Options;
+type config = Config & DeleteOptions;
 
 export class DeleteCommand<U extends config>
   implements CommandModule<object, U>

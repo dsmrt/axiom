@@ -21,7 +21,7 @@ Axiom - An AWS focused config manager
 ### Install the CLI
 
 ```bash
-npm install axiom-cli
+npm install @dsmrt/axiom-cli
 ```
 
 ### CLI Usage
