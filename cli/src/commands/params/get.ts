@@ -7,12 +7,14 @@ import { awsOptions, commonOptions } from "../../options";
 import { buildPath } from "./utils";
 import chalk from "chalk";
 
-interface Options extends AwsConfigs {
+export interface GetOptions {
   env: string;
   path: string;
 }
 
-export class GetCommand<U extends Options> implements CommandModule<object, U> {
+export class GetCommand<U extends GetOptions>
+  implements CommandModule<object, U>
+{
   public command = "get [path]";
   public describe = "Get all parameters under the base path";
 

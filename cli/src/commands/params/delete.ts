@@ -54,7 +54,7 @@ export class DeleteCommand<U extends config>
       credentials: await CachedCredentialProvider(config.aws),
     });
 
-    if (path === args.awsSsmParameterPath) {
+    if (path === args.aws.baseParameterPath) {
       throw new Error(
         `Deleting the path (path: ${path}) that matches the base path (awsSsmParameterPath: ${args.awsSsmParameterPath}) is prohibited.`,
       );

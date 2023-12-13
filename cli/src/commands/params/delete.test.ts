@@ -47,8 +47,25 @@ vi.mock("inquirer", () => {
 describe("cli delete command", () => {
   it("test handler", () => {
     const base = new DeleteCommand();
-    base.handler({ ...args, ...config, ...options });
     const ssmClientMock = mockClient(SSMClient);
+    ssmClientMock.on(DeleteParameterCommand).resolves({});
+    base.handler({ ...args, ...config, ...options });
+    expect(base.command).toBe("delete <path>");
+  });
+
+  it("test handler error", async () => {
+    const base = new DeleteCommand();
+    const ssmClientMock = mockClient(SSMClient);
+    await expect(
+      base.handler({
+        ...args,
+        ...config,
+        ...{
+          force: true,
+          path: "/fake/test/",
+        },
+      }),
+    ).rejects.toThrowError();
     ssmClientMock.on(DeleteParameterCommand).resolves({});
     expect(base.command).toBe("delete <path>");
   });

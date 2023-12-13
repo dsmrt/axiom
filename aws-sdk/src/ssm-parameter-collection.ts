@@ -1,7 +1,7 @@
 import { getParametersByPath } from "./ssm-parameters";
 import { Parameter, SSMClient } from "@aws-sdk/client-ssm";
 
-type Params = {
+export type Params = {
   [key: string]: Parameter;
 };
 
