@@ -1,6 +1,6 @@
 {
     "name": "@dsmrt/axiom-aws-sdk",
-    "version": "0.0.1",
+    "version": "0.0.2-alpha.0",
     "description": "AWS sdk library for working with axiom cli",
     "main": "lib/index.js",
     "repository": {
@@ -18,7 +18,11 @@
         "watch": "vitest watch --coverage -c ./vitest.config.ts",
         "build": "tsc -d -p ./tsconfig.json"
     },
-    "keywords": ["axiom","config","aws"],
+    "keywords": [
+        "axiom",
+        "config",
+        "aws"
+    ],
     "author": {
         "name": "Damien Smrt",
         "url": "https://dsmrt.com"
