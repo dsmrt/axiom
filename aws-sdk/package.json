@@ -1,6 +1,6 @@
 {
     "name": "@dsmrt/axiom-aws-sdk",
-    "version": "0.0.2-alpha.0",
+    "version": "0.0.3-alpha.0",
     "description": "AWS sdk library for working with axiom cli",
     "main": "lib/index.js",
     "repository": {
