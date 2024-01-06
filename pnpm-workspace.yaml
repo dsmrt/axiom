@@ -1,0 +1,4 @@
+packages:
+  - aws-sdk
+  - cli
+  - config

@@ -1,0 +1,11 @@
+# The basics
+coverage/*
+.env
+.env.*
+*.log
+*.ts
+*.tgz
+*.snk
+!*.d.ts
+!*.js
+

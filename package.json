@@ -1,0 +1,17 @@
+{
+  "name": "axiom",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "pnpm run -r --if-present test",
+    "build": "pnpm run -r --if-present build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "lerna": "^7.4.2"
+  }
+}
