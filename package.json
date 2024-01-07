@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "pnpm lerna run test",
-    "build": "pnpm lerna run build",
+    "test": "pnpm run -r --if-present test",
+    "build": "pnpm run -r --if-present build",
     "publish": "pnpm run -r --if-present publish"
   },
   "keywords": [],
