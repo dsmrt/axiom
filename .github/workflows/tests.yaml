@@ -8,7 +8,7 @@ on:
       - "test/*"
 
 jobs:
-  build:
+  install-and-test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -17,12 +17,29 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - run: npm install -g pnpm
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
-      - run: pnpm install
-      - run: pnpm test
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        with:
+          version: 8
+          run_install: false
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: |
+          pnpm install
+          pnpm test
