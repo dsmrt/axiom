@@ -20,6 +20,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          registry-url: 'https://registry.npmjs.org'
+          scope: "@dsmrt"
       - uses: pnpm/action-setup@v2
         name: Install pnpm
         with:
@@ -39,6 +41,8 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install/Build/Lint/Test
+        env: 
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           pnpm install
           pnpm build
