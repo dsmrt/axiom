@@ -20,7 +20,8 @@
         "lint:fix": "eslint ./src/ --ext .ts --fix",
         "test": "vitest run --coverage",
         "watch": "vitest watch --coverage",
-        "build": "tsc -d -p ./tsconfig.json"
+        "build": "tsc -d -p ./tsconfig.json",
+        "publish": "pnpm publish --access=public"
     },
     "keywords": [
         "axiom",
