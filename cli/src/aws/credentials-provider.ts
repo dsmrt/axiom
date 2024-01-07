@@ -16,6 +16,20 @@ import Cache from "../cache";
 const CACHE_KEY_PREFIX = "axiom#aws-credentials";
 const cache = new Cache();
 
+export const returnCredentialsFromAssumerole = (
+  creds: AssumeRoleResponseCreds,
+): {
+  accessKeyId: string;
+  secretAccessKey: string;
+  sessionToken: string;
+} => {
+  return {
+    accessKeyId: `${creds.AccessKeyId}`,
+    secretAccessKey: `${creds.SecretAccessKey}`,
+    sessionToken: `${creds.SessionToken}`,
+  };
+};
+
 const CachedCredentialViaProfileAndRegion = async (
   profile: string,
   region?: string,
@@ -27,61 +41,61 @@ const CachedCredentialViaProfileAndRegion = async (
 
   // return the cache if there's something there
   if (creds !== undefined) {
-    return async () => {
-      return {
-        accessKeyId: `${creds.AccessKeyId}`,
-        secretAccessKey: `${creds.SecretAccessKey}`,
-        sessionToken: `${creds.SessionToken}`,
-      };
-    };
+    return async () => returnCredentialsFromAssumerole(creds);
   }
 
   // else return
   return fromNodeProviderChain({
     profile,
-    roleAssumer: async (
-      sourceCreds: AwsCredentialIdentity,
-      params: AssumeRoleCommandInput,
-    ): Promise<AwsCredentialIdentity> => {
-      const command = new AssumeRoleCommand(params);
-
-      const client = new STSClient({
-        region: region ?? "us-east-1",
-        credentials: sourceCreds,
-      });
-
-      const result = await client.send(command);
-      if (
-        result?.Credentials?.AccessKeyId === undefined ||
-        result?.Credentials?.SecretAccessKey === undefined ||
-        result?.Credentials?.SessionToken === undefined
-      ) {
-        throw new Error("Unable to fetch credentials.");
-      }
-
-      // set cache
-      cache.set(
-        cacheKeyName,
-        result.Credentials,
-        result.Credentials.Expiration,
-      );
-
-      return {
-        accessKeyId: result.Credentials.AccessKeyId,
-        secretAccessKey: result.Credentials.SecretAccessKey,
-        sessionToken: result.Credentials.SessionToken,
-      };
-    },
-    mfaCodeProvider: async (mfaSerial: string) => {
-      // return mfaSerial
-      const mfaCode = await inquirer.prompt({
-        name: "code",
-        message: `Enter MFA code for ${mfaSerial}: `,
-        type: "password",
-      });
-      return mfaCode.code;
-    },
+    roleAssumer: roleAssumerCallable({
+      region: region ?? "us-east-1",
+      cacheKeyName: cacheKeyName,
+    }),
+    mfaCodeProvider,
   });
+};
+
+export const roleAssumerCallable = (config: {
+  region: string;
+  cacheKeyName: string;
+}) => {
+  return async (
+    sourceCreds: AwsCredentialIdentity,
+    params: AssumeRoleCommandInput,
+  ): Promise<AwsCredentialIdentity> => {
+    const command = new AssumeRoleCommand(params);
+
+    const client = new STSClient({
+      region: config.region,
+      credentials: sourceCreds,
+    });
+
+    const result = await client.send(command);
+    const creds = result.Credentials;
+    if (
+      creds === undefined ||
+      creds?.AccessKeyId === undefined ||
+      creds?.SecretAccessKey === undefined ||
+      creds?.SessionToken === undefined
+    ) {
+      throw new Error("Unable to fetch credentials.");
+    }
+
+    // set cache
+    cache.set(config.cacheKeyName, creds, creds.Expiration);
+
+    return returnCredentialsFromAssumerole(creds);
+  };
+};
+
+export const mfaCodeProvider = async (mfaSerial: string) => {
+  // return mfaSerial
+  const mfaCode = await inquirer.prompt({
+    name: "code",
+    message: `Enter MFA code for ${mfaSerial}: `,
+    type: "password",
+  });
+  return mfaCode.code;
 };
 
 const CachedCredentialProvider = (
