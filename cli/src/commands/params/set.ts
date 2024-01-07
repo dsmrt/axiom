@@ -11,7 +11,7 @@ import { awsOptions, commonOptions } from "../../options";
 import chalk from "chalk";
 import { buildPath } from "./utils";
 
-interface Options extends AwsConfigs {
+export interface SetOptions extends AwsConfigs {
   env: string;
   path: string;
   value: string;
@@ -20,29 +20,28 @@ interface Options extends AwsConfigs {
   overwrite: boolean;
 }
 
-export class SetCommand<U extends Options> implements CommandModule<object, U> {
+export class SetCommand<U extends SetOptions>
+  implements CommandModule<object, U>
+{
   public command = "set <path> <value>";
   public describe = "Set all parameters under the base path";
 
   public builder = (args: Argv): Argv<U> => {
     const config = loadConfig();
-    args
-      .positional("path", {
-        type: "string",
-        describe:
-          `Path to parameter. Supports absolute and relative paths.` +
-          `\nExample: "/root/myParam" or "service/secret" (which translates to, "${buildPath(
-            config,
-            "service/secret",
-          )})`,
-      })
-      .demandOption("path", "Path is required");
-    args
-      .positional("value", {
-        type: "string",
-        demandOption: "value is required",
-      })
-      .demandOption("value", "Value is required");
+    args.positional("path", {
+      type: "string",
+      describe:
+        `Path to parameter. Supports absolute and relative paths.` +
+        `\nExample: "/root/myParam" or "service/secret" (which translates to, "${buildPath(
+          config,
+          "service/secret",
+        )})`,
+    });
+    args.demandOption("path", "Path is required");
+    args.positional("value", {
+      type: "string",
+    });
+    args.demandOption("value", "Value is required");
     args.option("force", {
       boolean: true,
       default: false,
