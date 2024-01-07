@@ -1,6 +1,6 @@
 {
     "name": "@dsmrt/axiom-cli",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "axiom cli for managing configs including secrets",
     "main": "lib/bin/axiom.js",
     "types": "lib/index.d.ts",
@@ -20,7 +20,8 @@
         "lint:fix": "eslint ./src/ --ext .ts --fix",
         "test": "vitest run --coverage",
         "watch": "vitest watch --coverage",
-        "build": "tsc -d -p ./tsconfig.json"
+        "build": "tsc -d -p ./tsconfig.json",
+        "version:patch": "pnpm version patch"
     },
     "keywords": [
         "axiom",

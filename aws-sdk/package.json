@@ -1,6 +1,6 @@
 {
     "name": "@dsmrt/axiom-aws-sdk",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "AWS sdk library for working with axiom cli",
     "main": "lib/index.js",
     "repository": {
@@ -16,7 +16,8 @@
         "lint:fix": "eslint ./src/ --ext .ts --fix",
         "test": "vitest run --coverage -c ./vitest.config.ts",
         "watch": "vitest watch --coverage -c ./vitest.config.ts",
-        "build": "tsc -d -p ./tsconfig.json"
+        "build": "tsc -d -p ./tsconfig.json",
+        "version:patch": "pnpm version patch"
     },
     "keywords": [
         "axiom",
