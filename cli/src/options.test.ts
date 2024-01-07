@@ -1,4 +1,4 @@
-import { vi, describe, it, expect } from "vitest";
+import { describe, it, expect } from "vitest";
 import { commonOptions, awsOptions } from "./options";
 
 describe("cli command options", () => {
