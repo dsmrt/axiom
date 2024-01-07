@@ -1,4 +1,4 @@
-import { CommandModule, Argv, ArgumentsCamelCase } from "yargs";
+import { CommandModule, ArgumentsCamelCase } from "yargs";
 import { loadConfig } from "@dsmrt/axiom-config";
 
 interface ConfigOptions {

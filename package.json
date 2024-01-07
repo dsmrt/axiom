@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "pnpm run -r --if-present lint",
+    "lint:fix": "pnpm run -r --if-present lint:fix",
     "test": "pnpm run -r --if-present test",
     "build": "pnpm run -r --if-present build",
     "publish": "pnpm run -r --if-present publish"

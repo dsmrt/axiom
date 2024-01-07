@@ -1,11 +1,10 @@
-name: test
-
+name: publish
 on:
-  pull_request:
-  push:
-    branches:
-      - main
-      - "test/*"
+  workflow_run:
+    workflows: ["test"]
+    branches: [main]
+    types: 
+      - completed
 
 jobs:
   install-and-test:
@@ -13,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x, 18.x, 20.x]
+        node-version: [20.x]
 
     steps:
       - uses: actions/checkout@v4
@@ -43,5 +42,4 @@ jobs:
         run: |
           pnpm install
           pnpm build
-          pnpm lint
-          pnpm test
+          pnpm run publish
