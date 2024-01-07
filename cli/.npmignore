@@ -1,10 +1,13 @@
 # The basics
 coverage/*
+src/*
 .env
 .env.*
 *.log
 *.ts
 *.tgz
 *.snk
-!*.d.ts
-!*.js
+!lib/*.d.ts
+!lib/**/*.d.ts
+!lib/*.js
+!lib/**/*.js

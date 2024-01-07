@@ -1,6 +1,6 @@
 {
     "name": "@dsmrt/axiom-config",
-    "version": "0.0.3",
+    "version": "0.0.5",
     "description": "Config library for axiom cli",
     "main": "lib/index.js",
     "repository": {
@@ -16,8 +16,7 @@
         "lint:fix": "eslint ./src/ --ext .ts --fix",
         "test": "vitest run --coverage -c ./vitest.config.ts",
         "watch": "vitest watch --coverage -c ./vitest.config.ts",
-        "build": "tsc -d -p ./tsconfig.json",
-        "publish": "pnpm publish --access=public"
+        "build": "tsc -d -p ./tsconfig.json"
     },
     "keywords": [
         "axiom",
