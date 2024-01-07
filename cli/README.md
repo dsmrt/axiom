@@ -4,15 +4,9 @@
   <img alt="Axiom logo" src="./images/axiom-light-mode.svg">
 </picture>
 
-# Axiom 
+# Axiom - CLI
 
 > An AWS focused config manager
-
-## Packages
-
-- `@dsmrt/axiom-cli`
-- `@dsmrt/axiom-aws-sdk`
-- `@dsmrt/axiom-config`
 
 ## Features
 - Multiple environments/accounts/regions
@@ -35,15 +29,6 @@ npm install @dsmrt/axiom-cli
 ```
 axiom --help
 ```
-
-### Config Usage
-
-## Examples
-
-> TODO
-
-- use with AWS CDK
-- within your nodejs app
 
 ## Acknowledgements
 
