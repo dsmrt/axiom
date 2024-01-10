@@ -15,7 +15,9 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+      "@dsmrt/axiom-cli": "workspace:^"
+  },
   "devDependencies": {
     "lerna": "^7.4.2"
   }

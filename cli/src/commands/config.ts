@@ -1,4 +1,4 @@
-import { CommandModule, ArgumentsCamelCase } from "yargs";
+import { CommandModule, ArgumentsCamelCase, Argv, CommandBuilder } from "yargs";
 import { loadConfig } from "@dsmrt/axiom-config";
 
 interface ConfigOptions {
@@ -10,6 +10,15 @@ export class Config<U extends ConfigOptions>
 {
   public command = "config";
   public describe = "print the config";
+
+  public builder?: CommandBuilder<object, U> | undefined = (
+    args: Argv,
+  ): Argv<U> => {
+    args.option("env", {
+      type: "string",
+    });
+    return args as unknown as Argv<U>;
+  };
 
   public handler = async (args: ArgumentsCamelCase<U>) => {
     console.log(await this.loadConfig(args));
