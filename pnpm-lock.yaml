@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@dsmrt/axiom-cli':
+        specifier: workspace:^
+        version: link:cli
     devDependencies:
       lerna:
         specifier: ^7.4.2
