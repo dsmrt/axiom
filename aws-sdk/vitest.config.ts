@@ -8,6 +8,7 @@ export default defineConfig({
       provider: "v8",
       all: true,
       exclude: ["lib/**/*", "src/__mocks__/**/*"],
+      reporter: ["text-summary", "json-summary"],
     },
   },
 });
