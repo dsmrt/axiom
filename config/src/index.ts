@@ -8,11 +8,13 @@ export interface AwsConfigs {
   baseParameterPath: string;
 }
 
-export interface Config {
+export interface BaseConfig {
   name: string;
   env: string;
   aws: AwsConfigs;
 }
+
+export type Config<T = object> = T & BaseConfig;
 
 export interface LoadConfigInput {
   /**
