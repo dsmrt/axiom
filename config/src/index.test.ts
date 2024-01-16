@@ -62,4 +62,23 @@ describe("load configs", () => {
 
     expect(jsPath).toBe(MOCK_AXIOM_JS_CONFIG_DEV);
   });
+
+  it("test isProd", () => {
+    const jsonConfig = loadConfig({
+      env: "dev",
+      cwd: MOCK_AXIOM_JSON_CONFIG_DIR,
+    });
+    expect(jsonConfig.isProd()).toBeFalsy();
+    const jsConfig = loadConfig({ cwd: MOCK_AXIOM_JS_CONFIG_DIR });
+    expect(jsConfig.isProd()).toBeTruthy();
+  });
+  it("test asParameterPath", () => {
+    const jsonConfig = loadConfig({
+      env: "dev",
+      cwd: MOCK_AXIOM_JSON_CONFIG_DIR,
+    });
+    expect(jsonConfig.asParameterPath("my-secret")).toBe("/dev-path/my-secret");
+    const jsConfig = loadConfig({ cwd: MOCK_AXIOM_JS_CONFIG_DIR });
+    expect(jsConfig.asParameterPath("my-secret")).toBe("/prod-path/my-secret");
+  });
 });
