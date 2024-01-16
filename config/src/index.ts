@@ -34,7 +34,7 @@ export class ConfigContainer<T = object> implements BaseConfig, ConfigMethods {
     this.aws = config.aws;
     this.prodEnvName ??= config.prodEnvName;
     for (const prop in config) {
-      // @ts-ignore
+      // @ts-expect-error due to the interface being dynamic, we can't predict their properties
       this[prop] = config[prop];
     }
   }
