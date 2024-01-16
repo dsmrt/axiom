@@ -12,9 +12,43 @@ export interface BaseConfig {
   name: string;
   env: string;
   aws: AwsConfigs;
+  prodEnvName?: string;
 }
 
 export type Config<T = object> = T & BaseConfig;
+
+interface ConfigMethods {
+  isProd(): boolean;
+  asParameterPath(name: string): string;
+}
+
+export class ConfigContainer<T = object> implements BaseConfig, ConfigMethods {
+  readonly name: string;
+  readonly env: string;
+  readonly aws: AwsConfigs;
+  readonly prodEnvName?: string = "prod";
+
+  constructor(config: T & BaseConfig) {
+    this.name = config.name;
+    this.env = config.env;
+    this.aws = config.aws;
+    this.prodEnvName ??= config.prodEnvName;
+    for (const prop in config) {
+      // @ts-ignore
+      this[prop] = config[prop];
+    }
+  }
+
+  public isProd(): boolean {
+    return this.env == this.prodEnvName;
+  }
+
+  public asParameterPath(name: string): string {
+    return (
+      this.aws.baseParameterPath.replace(new RegExp("/+$"), "") + `/${name}`
+    );
+  }
+}
 
 export interface LoadConfigInput {
   /**
@@ -46,7 +80,7 @@ export const importConfigFromPath = (path: string): Config => {
 
 export const loadConfig = <T extends object>(
   input?: LoadConfigInput,
-): Config & T => {
+): ConfigContainer<T> => {
   // get the base file
   const baseConfigFile = configPath(input);
 
@@ -60,8 +94,10 @@ export const loadConfig = <T extends object>(
     overrides = mergeDeep(devConfig, overrides);
   }
 
+  const configObject = mergeDeep(baseConfig, overrides);
+
   // merge env file
-  return mergeDeep(baseConfig, overrides);
+  return new ConfigContainer(configObject);
 };
 
 /**
