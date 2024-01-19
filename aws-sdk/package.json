@@ -2,7 +2,9 @@
     "name": "@dsmrt/axiom-aws-sdk",
     "version": "0.0.11",
     "description": "AWS sdk library for working with axiom cli",
-    "main": "lib/index.js",
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
     "repository": {
         "type": "git",
         "url": "git@github.com:dsmrt/axiom.git",
@@ -16,8 +18,8 @@
         "lint:fix": "eslint ./src/ --ext .ts --fix",
         "test": "vitest run --coverage -c ./vitest.config.ts",
         "watch": "vitest watch --coverage -c ./vitest.config.ts",
-        "build": "tsc -d -p ./tsconfig.json",
-        "version:patch": "pnpm version patch"
+        "build": "tsup --entry ./src/bin/axiom.ts --entry ./src/index.ts --format cjs,esm --dts --clean",
+        "release": "pnpm run build && pnpm changeset publish"
     },
     "keywords": [
         "axiom",
@@ -30,6 +32,7 @@
     },
     "license": "MIT",
     "devDependencies": {
+        "@changesets/cli": "^2.27.1",
         "@types/node": "^20.9.0",
         "@typescript-eslint/eslint-plugin": "^6.12.0",
         "@typescript-eslint/parser": "^6.12.0",
@@ -37,6 +40,7 @@
         "eslint": "^8.54.0",
         "prettier": "^3.1.0",
         "ts-node": "^10.9.1",
+        "tsup": "^8.0.1",
         "typescript": "^5.2.2",
         "vitest": "^0.34.6"
     },
