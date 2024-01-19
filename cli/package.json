@@ -2,8 +2,9 @@
     "name": "@dsmrt/axiom-cli",
     "version": "0.0.11",
     "description": "axiom cli for managing configs including secrets",
-    "main": "lib/bin/axiom.js",
-    "types": "lib/index.d.ts",
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
     "repository": {
         "type": "git",
         "url": "git@github.com:dsmrt/axiom.git",
@@ -13,15 +14,15 @@
         "registry": "https://registry.npmjs.org/"
     },
     "bin": {
-        "axiom": "./lib/bin/axiom.js"
+        "axiom": "dist/bin/axiom.mjs"
     },
     "scripts": {
-        "lint": "eslint ./src/ --ext .ts",
-        "lint:fix": "eslint ./src/ --ext .ts --fix",
+        "lint": "eslint ./src/ ./src/aws ./src/bin --ext .ts",
+        "lint:fix": "eslint ./src/ ./src/aws ./src/bin --ext .ts --fix",
         "test": "vitest run --coverage",
         "watch": "vitest watch --coverage",
-        "build": "tsc -d -p ./tsconfig.json",
-        "version:patch": "pnpm version patch"
+        "build": "tsup --entry ./src/bin/axiom.ts --entry ./src/index.ts --format cjs,esm --dts --clean",
+        "release": "pnpm run build && pnpm changeset publish"
     },
     "keywords": [
         "axiom",
@@ -35,6 +36,7 @@
     },
     "license": "MIT",
     "devDependencies": {
+        "@changesets/cli": "^2.27.1",
         "@types/inquirer": "^8.0.0",
         "@types/node": "^20.9.0",
         "@types/yargs": "^17.0.31",
@@ -45,6 +47,7 @@
         "eslint": "^8.54.0",
         "prettier": "^3.1.0",
         "ts-node": "^10.9.1",
+        "tsup": "^8.0.1",
         "typescript": "^5.2.2",
         "vitest": "^0.34.6"
     },

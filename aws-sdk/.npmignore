@@ -7,7 +7,11 @@ src/*
 *.ts
 *.tgz
 *.snk
-!lib/*.d.ts
-!lib/**/*.d.ts
-!lib/*.js
-!lib/**/*.js
+!dist/*.d.ts
+!dist/**/*.d.ts
+!dist/*.d.mts
+!dist/**/*.d.mts
+!dist/*.js
+!dist/**/*.js
+!dist/*.mjs
+!dist/**/*.mjs

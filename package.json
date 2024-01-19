@@ -9,16 +9,15 @@
     "lint:fix": "pnpm run -r --if-present lint:fix",
     "test": "pnpm run -r --if-present test",
     "build": "pnpm run -r --if-present build",
-    "publish:ci": "pnpm -r publish",
-    "version:patch": "pnpm run -r --if-present version:patch"
+    "release": "pnpm run -r --if-present release"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "dependencies": {
-      "@dsmrt/axiom-cli": "workspace:^"
+    "@dsmrt/axiom-cli": "workspace:^"
   },
   "devDependencies": {
-    "lerna": "^7.4.2"
+    "@changesets/cli": "^2.27.1"
   }
 }
