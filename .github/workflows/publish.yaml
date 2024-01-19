@@ -23,6 +23,12 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           scope: "@dsmrt"
 
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        with:
+          version: 8
+          run_install: false
+
       - run: pnpm install --frozen-lockfile
       - name: Create Release Pull Request
         id: changesets
