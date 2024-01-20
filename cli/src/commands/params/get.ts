@@ -24,12 +24,11 @@ export class GetCommand<U extends GetOptions>
     args.positional("path", {
       type: "string",
       describe:
-        `OPTIONAL path to parameter. Supports absolute and relative paths.` +
-        `\nExample: "/root/myParam" or "service/secret" (which translates to, "${buildPath(
+        `OPTIONAL path to parameter. Supports absolute and relative paths.\n` +
+        `Example:\n\t"/root/myParam" or "service/secret" (which translates to, "${buildPath(
           config,
           "service/secret",
         )})`,
-      // default: config.awsSsmParameterPath,
     });
 
     return args as unknown as Argv<U>;
