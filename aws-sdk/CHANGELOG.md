@@ -1,5 +1,11 @@
 # @dsmrt/axiom-aws-sdk
 
+## 0.1.1
+
+### Patch Changes
+
+- fe5cfa4: fixing npm readme image
+
 ## 0.1.0
 
 ### Minor Changes

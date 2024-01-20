@@ -1,7 +1,7 @@
 name: Release
 
 permissions:
-  actions: read
+  actions: write
   checks: write
   contents: write
   pull-requests: write
