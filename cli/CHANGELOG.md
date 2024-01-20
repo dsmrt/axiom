@@ -1,5 +1,17 @@
 # @dsmrt/axiom-cli
 
+## 0.2.0
+
+### Minor Changes
+
+- 7aa81f2: fixing issues with publishing the package with changesets
+
+### Patch Changes
+
+- Updated dependencies [7aa81f2]
+  - @dsmrt/axiom-aws-sdk@0.2.0
+  - @dsmrt/axiom-config@0.2.0
+
 ## 0.1.2
 
 ### Patch Changes
