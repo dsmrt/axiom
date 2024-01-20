@@ -1,5 +1,11 @@
 # @dsmrt/axiom-cli
 
+## 0.1.2
+
+### Patch Changes
+
+- a21ce35: Update the cli docs and attempt to fix issues with changesets
+
 ## 0.1.1
 
 ### Patch Changes
