@@ -28,7 +28,7 @@ export class ConfigContainer<T = object> implements BaseConfig, ConfigMethods {
   readonly aws: AwsConfigs;
   readonly prodEnvName?: string = "prod";
 
-  constructor(config: T & BaseConfig) {
+  constructor(config: BaseConfig) {
     this.name = config.name;
     this.env = config.env;
     this.aws = config.aws;
@@ -80,7 +80,7 @@ export const importConfigFromPath = (path: string): Config => {
 
 export const loadConfig = <T extends object>(
   input?: LoadConfigInput,
-): ConfigContainer<T> => {
+): ConfigContainer & T => {
   // get the base file
   const baseConfigFile = configPath(input);
 
