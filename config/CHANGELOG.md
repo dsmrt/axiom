@@ -1,5 +1,11 @@
 # @dsmrt/axiom-config
 
+## 0.2.1
+
+### Patch Changes
+
+- 90d88c8: fix load config return with custom interfaces
+
 ## 0.2.0
 
 ### Minor Changes
