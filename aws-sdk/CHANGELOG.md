@@ -1,5 +1,11 @@
 # @dsmrt/axiom-aws-sdk
 
+## 0.2.1
+
+### Patch Changes
+
+- c61c468: aws sdk issue with missing fast xml parser dep
+
 ## 0.2.0
 
 ### Minor Changes

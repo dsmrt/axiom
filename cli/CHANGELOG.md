@@ -1,5 +1,13 @@
 # @dsmrt/axiom-cli
 
+## 0.2.1
+
+### Patch Changes
+
+- c61c468: aws sdk issue with missing fast xml parser dep
+- Updated dependencies [c61c468]
+  - @dsmrt/axiom-aws-sdk@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes
