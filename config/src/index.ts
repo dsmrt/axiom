@@ -22,13 +22,13 @@ interface ConfigMethods {
   asParameterPath(name: string): string;
 }
 
-export class ConfigContainer<T = object> implements BaseConfig, ConfigMethods {
+export class ConfigContainer implements BaseConfig, ConfigMethods {
   readonly name: string;
   readonly env: string;
   readonly aws: AwsConfigs;
   readonly prodEnvName?: string = "prod";
 
-  constructor(config: T & BaseConfig) {
+  constructor(config: BaseConfig) {
     this.name = config.name;
     this.env = config.env;
     this.aws = config.aws;
@@ -80,7 +80,7 @@ export const importConfigFromPath = (path: string): Config => {
 
 export const loadConfig = <T extends object>(
   input?: LoadConfigInput,
-): ConfigContainer<T> => {
+): ConfigContainer & T => {
   // get the base file
   const baseConfigFile = configPath(input);
 
@@ -97,7 +97,7 @@ export const loadConfig = <T extends object>(
   const configObject = mergeDeep(baseConfig, overrides);
 
   // merge env file
-  return new ConfigContainer(configObject);
+  return new ConfigContainer(configObject) as ConfigContainer & T;
 };
 
 /**
