@@ -22,7 +22,7 @@ interface ConfigMethods {
   asParameterPath(name: string): string;
 }
 
-export class ConfigContainer<T = object> implements BaseConfig, ConfigMethods {
+export class ConfigContainer implements BaseConfig, ConfigMethods {
   readonly name: string;
   readonly env: string;
   readonly aws: AwsConfigs;
@@ -97,7 +97,7 @@ export const loadConfig = <T extends object>(
   const configObject = mergeDeep(baseConfig, overrides);
 
   // merge env file
-  return new ConfigContainer(configObject);
+  return new ConfigContainer(configObject) as ConfigContainer & T;
 };
 
 /**
