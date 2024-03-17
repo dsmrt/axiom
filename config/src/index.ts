@@ -81,8 +81,12 @@ export const importConfigFromPath = (path: string): Config => {
 export const loadConfig = <T extends object>(
   input?: LoadConfigInput,
 ): ConfigContainer & T => {
+  console.log("INPUT", input);
   // get the base file
-  const baseConfigFile = configPath(input);
+  const baseConfigFile = configPath({
+    ...input,
+    env: undefined,
+  });
 
   const baseConfig = importConfigFromPath(baseConfigFile);
 
@@ -90,6 +94,7 @@ export const loadConfig = <T extends object>(
 
   // get the environment file
   if (input?.env) {
+    console.log("INPUT", input);
     const devConfig = importConfigFromPath(configPath(input));
     overrides = mergeDeep(devConfig, overrides);
   }

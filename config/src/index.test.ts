@@ -50,6 +50,36 @@ describe("load configs", () => {
     expect(jsConfig.env).toBe("prod");
   });
 
+  it("test isProd", () => {
+    const isProdConfig = loadConfig({
+      cwd: MOCK_AXIOM_JS_CONFIG_DIR,
+    });
+    console.log("PROD", isProdConfig, loadConfig);
+    expect(isProdConfig.isProd()).toBeTruthy();
+  });
+
+  it("test not isProd", () => {
+    const jsonConfig = loadConfig({
+      env: "dev",
+      cwd: MOCK_AXIOM_JSON_CONFIG_DIR,
+    });
+    expect(jsonConfig.isProd()).toBeFalsy();
+  });
+
+  it("test inheritence", () => {
+    const jsonPath = configPath({
+      env: "dev",
+      cwd: MOCK_AXIOM_JSON_CONFIG_DIR,
+    });
+
+    expect(jsonPath).toBe(MOCK_AXIOM_JSON_CONFIG_DEV);
+
+    const config = loadConfig({ env: "dev", cwd: MOCK_AXIOM_JS_CONFIG_DIR });
+
+    expect(config.env).toBe("dev");
+    expect(config.aws.region).toBe("us-east-1");
+  });
+
   it("test path", () => {
     const jsonPath = configPath({
       env: "dev",
@@ -63,15 +93,6 @@ describe("load configs", () => {
     expect(jsPath).toBe(MOCK_AXIOM_JS_CONFIG_DEV);
   });
 
-  it("test isProd", () => {
-    const jsonConfig = loadConfig({
-      env: "dev",
-      cwd: MOCK_AXIOM_JSON_CONFIG_DIR,
-    });
-    expect(jsonConfig.isProd()).toBeFalsy();
-    const jsConfig = loadConfig({ cwd: MOCK_AXIOM_JS_CONFIG_DIR });
-    expect(jsConfig.isProd()).toBeTruthy();
-  });
   it("test asParameterPath", () => {
     const jsonConfig = loadConfig({
       env: "dev",

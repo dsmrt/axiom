@@ -7,8 +7,6 @@ const config = {
   aws: {
     account: "dev-account",
     profile: "dev-profile",
-    region: "us-north-1",
-    baseParameterPath: "/dev-path",
   },
 };
 
