@@ -1,5 +1,12 @@
 # @dsmrt/axiom-config
 
+## 0.2.2
+
+### Patch Changes
+
+- f23a8f2: fixing inheretance
+- f23a8f2: fix load config return with custom interfaces
+
 ## 0.2.1
 
 ### Patch Changes
