@@ -1,5 +1,12 @@
 # @dsmrt/axiom-cli
 
+## 0.2.2
+
+### Patch Changes
+
+- Updated dependencies [90d88c8]
+  - @dsmrt/axiom-config@0.2.1
+
 ## 0.2.1
 
 ### Patch Changes

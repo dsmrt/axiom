@@ -81,7 +81,6 @@ export const importConfigFromPath = (path: string): Config => {
 export const loadConfig = <T extends object>(
   input?: LoadConfigInput,
 ): ConfigContainer & T => {
-  console.log("INPUT", input);
   // get the base file
   const baseConfigFile = configPath({
     ...input,
