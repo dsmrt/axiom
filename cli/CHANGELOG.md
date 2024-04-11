@@ -1,5 +1,11 @@
 # @dsmrt/axiom-cli
 
+## 0.3.0
+
+### Minor Changes
+
+- 9d383de: Updating the cli config command to print json
+
 ## 0.2.3
 
 ### Patch Changes

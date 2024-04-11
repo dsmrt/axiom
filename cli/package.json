@@ -1,6 +1,6 @@
 {
     "name": "@dsmrt/axiom-cli",
-    "version": "0.2.3",
+    "version": "0.3.0",
     "description": "axiom cli for managing configs including secrets",
     "main": "dist/index.js",
     "module": "dist/index.mjs",
