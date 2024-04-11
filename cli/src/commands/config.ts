@@ -21,7 +21,7 @@ export class Config<U extends ConfigOptions>
   };
 
   public handler = async (args: ArgumentsCamelCase<U>) => {
-    console.log(await this.loadConfig(args));
+    console.log(JSON.stringify(await this.loadConfig(args)));
   };
 
   public loadConfig = async (args: ConfigOptions) => {
