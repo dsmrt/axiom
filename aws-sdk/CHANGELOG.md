@@ -1,5 +1,11 @@
 # @dsmrt/axiom-aws-sdk
 
+## 0.2.2
+
+### Patch Changes
+
+- f4c9e19: fix: remove debug and fix testing
+
 ## 0.2.1
 
 ### Patch Changes
