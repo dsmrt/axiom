@@ -4,7 +4,7 @@
   <img alt="Axiom logo" src="../images/axiom-light-mode.svg">
 </picture>
 
-# Axiom - AWS SDK 
+# Axiom - AWS SDK
 
 > An AWS focused config manager
 
@@ -40,7 +40,7 @@ npm install @dsmrt/axiom-aws-sdk
            - "ssm:GetParameters"
            - "ssm:GetParametersByPath"
            Resource: !Sub 'arn:aws:ssm:*:*:parameter/${PARAMETER_PATH}/*'
-# OR 
+# OR
  Resources:
    LambdaPolicies:
      Type: AWS::IAM::Policy
@@ -83,5 +83,5 @@ npm install @dsmrt/axiom-aws-sdk
 ## Acknowledgements
 
 - [Nate Iler](https://github.com/nateiler)
+- [Go Mondo](https://www.go-mondo.com)
 - [Flipbox Digital](https://www.flipboxdigital.com)
-- [Go Mondo](https://www.flipboxdigital.com)

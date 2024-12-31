@@ -26,12 +26,12 @@ npm install @dsmrt/axiom-cli
 - View rendered configs
 - Manage SSM Parameters
 
-```
+```bash
 axiom --help
 ```
 
 ## Acknowledgements
 
 - [Nate Iler](https://github.com/nateiler)
+- [Go Mondo](https://www.go-mondo.com)
 - [Flipbox Digital](https://www.flipboxdigital.com)
-- [Go Mondo](https://www.flipboxdigital.com)

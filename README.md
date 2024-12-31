@@ -4,7 +4,7 @@
   <img alt="Axiom logo" src="./images/axiom-light-mode.svg">
 </picture>
 
-# Axiom 
+# Axiom
 
 > An AWS focused config manager
 
@@ -48,5 +48,5 @@ axiom --help
 ## Acknowledgements
 
 - [Nate Iler](https://github.com/nateiler)
+- [Go Mondo](https://www.go-mondo.com)
 - [Flipbox Digital](https://www.flipboxdigital.com)
-- [Go Mondo](https://www.flipboxdigital.com)
