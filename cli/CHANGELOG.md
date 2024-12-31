@@ -1,5 +1,14 @@
 # @dsmrt/axiom-cli
 
+## 0.3.1
+
+### Patch Changes
+
+- f4c9e19: fix: remove debug and fix testing
+- Updated dependencies [f4c9e19]
+  - @dsmrt/axiom-aws-sdk@0.2.2
+  - @dsmrt/axiom-config@0.2.3
+
 ## 0.3.0
 
 ### Minor Changes
