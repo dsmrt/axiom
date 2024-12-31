@@ -93,7 +93,6 @@ export const loadConfig = <T extends object>(
 
   // get the environment file
   if (input?.env) {
-    console.log("INPUT", input);
     const devConfig = importConfigFromPath(configPath(input));
     overrides = mergeDeep(devConfig, overrides);
   }
