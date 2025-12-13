@@ -1,9 +1,9 @@
 import { vi, describe, expect, it } from "vitest";
-import { SetCommand, SetOptions } from "./set";
+import { SetCommand, type SetOptions } from "./set";
 import { PutParameterCommand, SSMClient } from "@aws-sdk/client-ssm";
 import { mockClient } from "aws-sdk-client-mock";
-import { Config } from "@dsmrt/axiom-config";
-import { ArgumentsCamelCase, Argv } from "yargs";
+import type { Config } from "@dsmrt/axiom-config";
+import type { ArgumentsCamelCase, Argv } from "yargs";
 
 const config: Config = {
   name: "test",

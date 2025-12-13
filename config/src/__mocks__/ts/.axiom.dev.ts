@@ -1,4 +1,4 @@
-import { Config } from "../..";
+import type { Config } from "../..";
 
 const config: Config = {
   name: "my-prod-app",

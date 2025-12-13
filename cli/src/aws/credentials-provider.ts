@@ -2,14 +2,14 @@ import { fromNodeProviderChain } from "@aws-sdk/credential-providers";
 import {
   AssumeRoleCommand,
   STSClient,
-  Credentials as AssumeRoleResponseCreds,
-  AssumeRoleCommandInput,
+  type Credentials as AssumeRoleResponseCreds,
+  type AssumeRoleCommandInput,
 } from "@aws-sdk/client-sts";
-import {
+import type {
   AwsCredentialIdentity,
   AwsCredentialIdentityProvider,
 } from "@aws-sdk/types";
-import { AwsConfigs } from "@dsmrt/axiom-config";
+import type { AwsConfigs } from "@dsmrt/axiom-config";
 import inquirer from "inquirer";
 import Cache from "../cache";
 

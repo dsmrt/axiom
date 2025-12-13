@@ -24,7 +24,7 @@ vi.mock("@aws-sdk/client-ssm");
 
 test("Get Parameters By Path", async () => {
   /* eslint-disable */
-  // @ts-ignore
+  // @ts-expect-error
   client.send
     .mockResolvedValueOnce(byPathResult1)
     .mockResolvedValueOnce(byPathResult2)
@@ -37,7 +37,7 @@ test("Get Parameters By Path", async () => {
 
 test("Get Parameters", async () => {
   /* eslint-disable */
-  // @ts-ignore
+  // @ts-expect-error
   client.send.mockResolvedValue(getParametersResult);
 
   const parameters = await getParameters([`${paramName}`]);

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { buildPath } from "./utils";
-import { Config } from "@dsmrt/axiom-config";
+import type { Config } from "@dsmrt/axiom-config";
 
 describe("cli utils", () => {
   it("build path", () => {

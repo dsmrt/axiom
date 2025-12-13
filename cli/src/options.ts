@@ -1,4 +1,4 @@
-import { Options } from "yargs";
+import type { Options } from "yargs";
 
 export const commonOptions = (): { [key: string]: Options } => {
   return {

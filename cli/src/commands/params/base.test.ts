@@ -1,6 +1,6 @@
 import { vi, describe, expect, it } from "vitest";
 import { ParamsCommand } from "./base";
-import { Config } from "@dsmrt/axiom-config";
+import type { Config } from "@dsmrt/axiom-config";
 
 vi.mock("@dsmrt/axiom-config", () => {
   return {

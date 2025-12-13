@@ -1,8 +1,8 @@
 import { vi, describe, expect, it } from "vitest";
-import { GetCommand, GetOptions } from "./get";
-import { Parameter } from "@aws-sdk/client-ssm";
-import { Config } from "@dsmrt/axiom-config";
-import { ArgumentsCamelCase } from "yargs";
+import { GetCommand, type GetOptions } from "./get";
+import type { Parameter } from "@aws-sdk/client-ssm";
+import type { Config } from "@dsmrt/axiom-config";
+import type { ArgumentsCamelCase } from "yargs";
 
 const config: Config = {
   name: "test",

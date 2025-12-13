@@ -1,53 +1,50 @@
 {
-    "name": "@dsmrt/axiom-aws-sdk",
-    "version": "0.2.2",
-    "description": "AWS sdk library for working with axiom cli",
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "repository": {
-        "type": "git",
-        "url": "git@github.com:dsmrt/axiom.git",
-        "directory": "aws-sdk"
-    },
-    "publishConfig": {
-        "registry": "https://registry.npmjs.org/"
-    },
-    "scripts": {
-        "lint": "eslint ./src/ --ext .ts",
-        "lint:fix": "eslint ./src/ --ext .ts --fix",
-        "test": "vitest run --coverage",
-        "watch": "vitest watch --coverage",
-        "build": "tsup --entry ./src/bin/axiom.ts --entry ./src/index.ts --format cjs,esm --dts --clean",
-        "release": "pnpm run build && pnpm changeset publish"
-    },
-    "keywords": [
-        "axiom",
-        "config",
-        "aws"
-    ],
-    "author": {
-        "name": "Damien Smrt",
-        "url": "https://dsmrt.com"
-    },
-    "license": "MIT",
-    "devDependencies": {
-        "@changesets/cli": "^2.27.11",
-        "@types/node": "^20.17.10",
-        "@typescript-eslint/eslint-plugin": "^6.21.0",
-        "@typescript-eslint/parser": "^6.21.0",
-        "@vitest/coverage-v8": "^1.6.0",
-        "eslint": "^8.57.1",
-        "prettier": "^3.4.2",
-        "ts-node": "^10.9.2",
-        "tsup": "^8.3.5",
-        "typescript": "^5.7.2",
-        "vitest": "^1.6.0"
-    },
-    "dependencies": {
-        "@aws-sdk/client-ssm": "^3.716.0",
-        "@aws-sdk/client-sts": "^3.716.0",
-        "@aws-sdk/credential-providers": "^3.716.0",
-        "@aws-sdk/types": "^3.714.0"
-    }
+	"name": "@dsmrt/axiom-aws-sdk",
+	"version": "0.2.2",
+	"description": "AWS sdk library for working with axiom cli",
+	"main": "dist/index.js",
+	"module": "dist/index.mjs",
+	"types": "dist/index.d.ts",
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:dsmrt/axiom.git",
+		"directory": "aws-sdk"
+	},
+	"publishConfig": {
+		"registry": "https://registry.npmjs.org/"
+	},
+	"scripts": {
+		"lint": "biome lint",
+		"lint:fix": "biome lint --fix",
+		"test": "vitest run --coverage",
+		"watch": "vitest watch --coverage",
+		"build": "tsup --entry ./src/bin/axiom.ts --entry ./src/index.ts --format cjs,esm --dts --clean",
+		"release": "pnpm run build && pnpm changeset publish"
+	},
+	"keywords": [
+		"axiom",
+		"config",
+		"aws"
+	],
+	"author": {
+		"name": "Damien Smrt",
+		"url": "https://dsmrt.com"
+	},
+	"license": "MIT",
+	"devDependencies": {
+		"@biomejs/biome": "^2.3.8",
+		"@changesets/cli": "^2.27.11",
+		"@types/node": "^20.17.10",
+		"@vitest/coverage-v8": "^1.6.0",
+		"ts-node": "^10.9.2",
+		"tsup": "^8.3.5",
+		"typescript": "^5.7.2",
+		"vitest": "^1.6.0"
+	},
+	"dependencies": {
+		"@aws-sdk/client-ssm": "^3.716.0",
+		"@aws-sdk/client-sts": "^3.716.0",
+		"@aws-sdk/credential-providers": "^3.716.0",
+		"@aws-sdk/types": "^3.714.0"
+	}
 }

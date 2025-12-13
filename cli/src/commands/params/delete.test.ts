@@ -1,7 +1,7 @@
 import { vi, describe, expect, it } from "vitest";
-import { DeleteCommand, DeleteOptions } from "./delete";
-import { Config } from "@dsmrt/axiom-config";
-import { ArgumentsCamelCase } from "yargs";
+import { DeleteCommand, type DeleteOptions } from "./delete";
+import type { Config } from "@dsmrt/axiom-config";
+import type { ArgumentsCamelCase } from "yargs";
 import { mockClient } from "aws-sdk-client-mock";
 import { SSMClient, DeleteParameterCommand } from "@aws-sdk/client-ssm";
 
