@@ -71,8 +71,31 @@ export const importConfigFromPath = (path: string): Config => {
     return JSON.parse(readFileSync(path).toString()) as Config;
   }
   if (/\.(m)?[j|t]s$/.test(path)) {
+    // Register ts-node for TypeScript files if not already registered
+    if (/\.tsx?$/.test(path)) {
+      try {
+        // Check if ts-node is already registered
+        if (!process[Symbol.for("ts-node.register.instance")]) {
+          require("ts-node").register({
+            transpileOnly: true,
+            compilerOptions: {
+              module: "commonjs",
+              esModuleInterop: true,
+            },
+          });
+        }
+      } catch (error) {
+        throw new Error(
+          `TypeScript files require ts-node to be installed. Run: pnpm add -D ts-node`,
+        );
+      }
+    }
     /* eslint-disable */
-    return require(path) as Config;
+    // Clear the require cache for this path to ensure fresh loading
+    delete require.cache[require.resolve(path)];
+    const loaded = require(path);
+    // Handle both default exports and module.exports
+    return (loaded.default || loaded) as Config;
   }
 
   throw new Error(`Path not found: {path}`);

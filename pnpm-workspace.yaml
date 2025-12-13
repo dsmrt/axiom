@@ -2,3 +2,6 @@ packages:
   - aws-sdk
   - cli
   - config
+
+onlyBuiltDependencies:
+  - esbuild
