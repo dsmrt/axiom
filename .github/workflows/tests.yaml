@@ -42,6 +42,6 @@ jobs:
       - name: Install/Build/Lint/Test
         run: |
           pnpm install
-          pnpm build
           pnpm lint
+          pnpm build
           pnpm test
