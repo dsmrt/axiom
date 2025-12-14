@@ -1,5 +1,17 @@
 # @dsmrt/axiom-cli
 
+## 1.0.0
+
+### Major Changes
+
+- d767a0e: Making loadConfig return a promise; adding typescript config support and better esm/mjs/mts support; better docs
+
+### Patch Changes
+
+- Updated dependencies [d767a0e]
+  - @dsmrt/axiom-aws-sdk@1.0.0
+  - @dsmrt/axiom-config@1.0.0
+
 ## 0.3.1
 
 ### Patch Changes

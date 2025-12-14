@@ -1,6 +1,6 @@
 {
 	"name": "@dsmrt/axiom-config",
-	"version": "0.2.3",
+	"version": "1.0.0",
 	"description": "Config library for axiom cli",
 	"main": "dist/index.js",
 	"module": "dist/index.mjs",
