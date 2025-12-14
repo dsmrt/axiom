@@ -5,6 +5,7 @@ import type {
 	CommandBuilder,
 	CommandModule,
 } from "yargs";
+import { debug } from "../debug";
 
 interface ConfigOptions {
 	env: string;
@@ -26,10 +27,14 @@ export class Config<U extends ConfigOptions>
 	};
 
 	public handler = async (args: ArgumentsCamelCase<U>) => {
-		console.log(JSON.stringify(await this.loadConfig(args)));
+		debug(`Config command handler called with env: ${args.env}`);
+		const config = await this.loadConfig(args);
+		debug(`Config loaded successfully, outputting as JSON`);
+		console.log(JSON.stringify(config));
 	};
 
 	public loadConfig = async (args: ConfigOptions) => {
+		debug(`Loading config with env: ${args.env}`);
 		return loadConfig(args);
 	};
 }

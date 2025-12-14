@@ -72,7 +72,6 @@ describe("return values", () => {
 	});
 	it("test mfa cli function", async () => {
 		const mfa = await mfaCodeProvider("SERIAL");
-		console.log(mfa);
 		expect(mfa).toBe("1234");
 	});
 });
