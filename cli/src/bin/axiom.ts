@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import yargs from "yargs";
-import { Config, ParamsCommand } from "../commands";
+import { Config, Init, ParamsCommand } from "../commands";
 
 yargs(process.argv.slice(2))
 	.env("AXIOM")
@@ -24,6 +24,7 @@ yargs(process.argv.slice(2))
 			process.env.AXIOM_DEBUG = "true";
 		}
 	})
+	.command(new Init())
 	.command(new Config())
 	.command(new ParamsCommand())
 	.strict()
