@@ -35,39 +35,39 @@ This monorepo contains three npm packages:
 
 Install the CLI globally or as a dev dependency:
 
-\`\`\`bash
+```bash
 # Global installation
 npm install -g @dsmrt/axiom-cli
 
 # Or as a project dependency
 npm install --save-dev @dsmrt/axiom-cli
-\`\`\`
+```
 
 For programmatic usage, install the config library:
 
-\`\`\`bash
+```bash
 npm install @dsmrt/axiom-config
-\`\`\`
+```
 
 ---
 
 ## 📝 Configuration Files
 
-Axiom uses configuration files to define your AWS infrastructure settings. These files are named \`.axiom.<format>\` and support multiple formats.
+Axiom uses configuration files to define your AWS infrastructure settings. These files are named `.axiom.<format>` and support multiple formats.
 
 ### Supported File Formats
 
-- \`.axiom.js\` - CommonJS JavaScript
-- \`.axiom.mjs\` - ES Module JavaScript
-- \`.axiom.ts\` - TypeScript (requires Node.js 22+ with \`--experimental-strip-types\`)
-- \`.axiom.mts\` - ES Module TypeScript
-- \`.axiom.json\` - JSON format
+- `.axiom.js` - CommonJS JavaScript
+- `.axiom.mjs` - ES Module JavaScript
+- `.axiom.ts` - TypeScript (requires Node.js 22+ with `--experimental-strip-types`)
+- `.axiom.mts` - ES Module TypeScript
+- `.axiom.json` - JSON format
 
 ### Base Configuration Structure
 
-Create a base configuration file (e.g., \`.axiom.ts\`) in your project root:
+Create a base configuration file (e.g., `.axiom.ts`) in your project root:
 
-\`\`\`typescript
+```typescript
 // .axiom.ts
 import type { Config } from "@dsmrt/axiom-config";
 
@@ -85,13 +85,13 @@ const config: Config = {
 };
 
 export default config;
-\`\`\`
+```
 
 ### Environment-Specific Configurations
 
 Create environment-specific configs that inherit from the base config:
 
-\`\`\`typescript
+```typescript
 // .axiom.dev.ts
 import type { Config } from "@dsmrt/axiom-config";
 
@@ -107,9 +107,9 @@ const config: Config = {
 };
 
 export default config;
-\`\`\`
+```
 
-\`\`\`typescript
+```typescript
 // .axiom.staging.ts
 import type { Config } from "@dsmrt/axiom-config";
 
@@ -125,25 +125,25 @@ const config: Config = {
 };
 
 export default config;
-\`\`\`
+```
 
 ### Configuration Properties
 
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
-| \`name\` | \`string\` | ✅ | Application name |
-| \`env\` | \`string\` | ✅ | Environment name (e.g., "dev", "staging", "prod") |
-| \`aws.account\` | \`string\` | ✅ | AWS account ID |
-| \`aws.region\` | \`string\` | ✅ | AWS region (e.g., "us-east-1") |
-| \`aws.profile\` | \`string\` | ✅ | AWS CLI profile name |
-| \`aws.baseParameterPath\` | \`string\` | ✅ | Base path for SSM parameters |
-| \`prodEnvName\` | \`string\` | ❌ | Production environment name (defaults to "prod") |
+| `name` | `string` | ✅ | Application name |
+| `env` | `string` | ✅ | Environment name (e.g., "dev", "staging", "prod") |
+| `aws.account` | `string` | ✅ | AWS account ID |
+| `aws.region` | `string` | ✅ | AWS region (e.g., "us-east-1") |
+| `aws.profile` | `string` | ✅ | AWS CLI profile name |
+| `aws.baseParameterPath` | `string` | ✅ | Base path for SSM parameters |
+| `prodEnvName` | `string` | ❌ | Production environment name (defaults to "prod") |
 
 ### Custom Configuration Properties
 
 You can extend the base config with custom properties:
 
-\`\`\`typescript
+```typescript
 // .axiom.ts
 import type { Config } from "@dsmrt/axiom-config";
 
@@ -176,17 +176,17 @@ const config: Config<MyAppConfig> = {
 };
 
 export default config;
-\`\`\`
+```
 
 ### Configuration Methods
 
 The loaded config includes helper methods:
 
-#### \`isProd(): boolean\`
+#### `isProd(): boolean`
 
-Returns \`true\` if the current environment is production:
+Returns `true` if the current environment is production:
 
-\`\`\`typescript
+```typescript
 import { loadConfig } from "@dsmrt/axiom-config";
 
 const config = await loadConfig({ env: "prod" });
@@ -194,18 +194,18 @@ console.log(config.isProd()); // true
 
 const devConfig = await loadConfig({ env: "dev" });
 console.log(devConfig.isProd()); // false
-\`\`\`
+```
 
-#### \`asParameterPath(name: string): string\`
+#### `asParameterPath(name: string): string`
 
 Converts a parameter name to a full SSM parameter path:
 
-\`\`\`typescript
+```typescript
 const config = await loadConfig({ env: "prod" });
 // If baseParameterPath is "/my-app/prod"
 console.log(config.asParameterPath("api-key"));
 // Output: "/my-app/prod/api-key"
-\`\`\`
+```
 
 ---
 
@@ -219,23 +219,23 @@ Available for all commands:
 
 | Option | Alias | Description | Default |
 |--------|-------|-------------|---------|
-| \`--env\` | \`-e\` | Environment name (loads \`.axiom.<env>.ts\`) | Uses base config |
-| \`--help\` | \`-h\` | Show help | - |
-| \`--version\` | \`-v\` | Show version | - |
+| `--env` | `-e` | Environment name (loads `.axiom.<env>.ts`) | Uses base config |
+| `--help` | `-h` | Show help | - |
+| `--version` | `-v` | Show version | - |
 
 ### Commands
 
-#### \`axiom config\`
+#### `axiom config`
 
 Display the loaded configuration for an environment.
 
 **Usage:**
-\`\`\`bash
+```bash
 axiom config [--env <environment>]
-\`\`\`
+```
 
 **Examples:**
-\`\`\`bash
+```bash
 # Show production config (base .axiom.ts)
 axiom config
 
@@ -244,10 +244,10 @@ axiom config --env dev
 
 # Show staging config (.axiom.staging.ts)
 axiom config --env staging
-\`\`\`
+```
 
 **Output:**
-\`\`\`json
+```json
 {
   "name": "my-app",
   "env": "prod",
@@ -258,28 +258,28 @@ axiom config --env staging
     "baseParameterPath": "/my-app/prod"
   }
 }
-\`\`\`
+```
 
 ---
 
-### \`axiom params\` - Parameter Management
+### `axiom params` - Parameter Management
 
-Manage AWS SSM parameters with the \`params\` subcommand group.
+Manage AWS SSM parameters with the `params` subcommand group.
 
-#### \`axiom params get [path]\`
+#### `axiom params get [path]`
 
 Retrieve parameters from AWS SSM Parameter Store.
 
 **Usage:**
-\`\`\`bash
+```bash
 axiom params get [path] [--env <environment>]
-\`\`\`
+```
 
 **Arguments:**
-- \`path\` (optional) - Specific parameter path (absolute or relative to base path)
+- `path` (optional) - Specific parameter path (absolute or relative to base path)
 
 **Examples:**
-\`\`\`bash
+```bash
 # Get all parameters under the base path for production
 axiom params get
 
@@ -291,40 +291,40 @@ axiom params get database/password --env prod
 
 # Get a specific parameter (absolute path)
 axiom params get /my-app/prod/api-key
-\`\`\`
+```
 
 **Output:**
-\`\`\`
+```
 /my-app/prod/database/host    prod-db.example.com
 /my-app/prod/database/password    ••••••••••
 /my-app/prod/api-key    sk_live_••••••••••
-\`\`\`
+```
 
 ---
 
-#### \`axiom params set <path> <value>\`
+#### `axiom params set <path> <value>`
 
 Create or update an SSM parameter.
 
 **Usage:**
-\`\`\`bash
+```bash
 axiom params set <path> <value> [options]
-\`\`\`
+```
 
 **Arguments:**
-- \`path\` (required) - Parameter path (absolute or relative to base path)
-- \`value\` (required) - Parameter value
+- `path` (required) - Parameter path (absolute or relative to base path)
+- `value` (required) - Parameter value
 
 **Options:**
 | Option | Alias | Type | Default | Description |
 |--------|-------|------|---------|-------------|
-| \`--env\` | \`-e\` | \`string\` | - | Environment name |
-| \`--force\` | \`-f\` | \`boolean\` | \`false\` | Skip confirmation prompt |
-| \`--secure\` | - | \`boolean\` | \`true\` | Save as SecureString (encrypted) |
-| \`--overwrite\` | - | \`boolean\` | \`true\` | Overwrite if parameter exists |
+| `--env` | `-e` | `string` | - | Environment name |
+| `--force` | `-f` | `boolean` | `false` | Skip confirmation prompt |
+| `--secure` | - | `boolean` | `true` | Save as SecureString (encrypted) |
+| `--overwrite` | - | `boolean` | `true` | Overwrite if parameter exists |
 
 **Examples:**
-\`\`\`bash
+```bash
 # Set a secure parameter (with confirmation)
 axiom params set database/password "mySecurePassword123" --env prod
 
@@ -336,40 +336,40 @@ axiom params set /my-app/staging/api-url "https://api.staging.example.com" --env
 
 # Fail if parameter already exists
 axiom params set new-param "value" --overwrite=false --env dev
-\`\`\`
+```
 
-**Interactive prompt (when \`--force\` is not used):**
-\`\`\`
+**Interactive prompt (when `--force` is not used):**
+```
 ? Are you sure you want to set 'database/password'? (Y/n)
-\`\`\`
+```
 
 **Output:**
-\`\`\`
+```
 Version: 3
-\`\`\`
+```
 
 ---
 
-#### \`axiom params delete <path>\`
+#### `axiom params delete <path>`
 
 Delete an SSM parameter.
 
 **Usage:**
-\`\`\`bash
+```bash
 axiom params delete <path> [options]
-\`\`\`
+```
 
 **Arguments:**
-- \`path\` (required) - Parameter path (absolute or relative to base path)
+- `path` (required) - Parameter path (absolute or relative to base path)
 
 **Options:**
 | Option | Alias | Type | Default | Description |
 |--------|-------|------|---------|-------------|
-| \`--env\` | \`-e\` | \`string\` | - | Environment name |
-| \`--force\` | \`-f\` | \`boolean\` | \`false\` | Skip confirmation prompt |
+| `--env` | `-e` | `string` | - | Environment name |
+| `--force` | `-f` | `boolean` | `false` | Skip confirmation prompt |
 
 **Examples:**
-\`\`\`bash
+```bash
 # Delete a parameter (with confirmation)
 axiom params delete old-api-key --env prod
 
@@ -378,31 +378,31 @@ axiom params delete temp-setting --force --env dev
 
 # Delete with absolute path
 axiom params delete /my-app/staging/deprecated-value --env staging
-\`\`\`
+```
 
-**Interactive prompt (when \`--force\` is not used):**
-\`\`\`
+**Interactive prompt (when `--force` is not used):**
+```
 ? Are you sure you want to delete '/my-app/prod/old-api-key'? (Y/n)
-\`\`\`
+```
 
 **Safety:**
 - Cannot delete the base parameter path itself
 - Always shows full path in confirmation prompts
 
 **Output:**
-\`\`\`
+```
 👍
-\`\`\`
+```
 
 ---
 
 ## 📚 Programmatic Usage
 
-Use \`@dsmrt/axiom-config\` in your Node.js applications:
+Use `@dsmrt/axiom-config` in your Node.js applications:
 
 ### Basic Usage
 
-\`\`\`typescript
+```typescript
 import { loadConfig } from "@dsmrt/axiom-config";
 
 // Load production config (base .axiom.ts)
@@ -414,11 +414,11 @@ console.log(config.aws.region); // "us-east-1"
 const devConfig = await loadConfig({ env: "dev" });
 console.log(devConfig.env); // "dev"
 console.log(devConfig.aws.account); // dev account ID
-\`\`\`
+```
 
 ### With Custom Properties
 
-\`\`\`typescript
+```typescript
 import { loadConfig } from "@dsmrt/axiom-config";
 
 interface MyAppConfig {
@@ -433,11 +433,11 @@ const config = await loadConfig<MyAppConfig>({ env: "prod" });
 // TypeScript knows about custom properties
 console.log(config.database.host); // "prod-db.example.com"
 console.log(config.isProd()); // true
-\`\`\`
+```
 
 ### With Overrides
 
-\`\`\`typescript
+```typescript
 import { loadConfig } from "@dsmrt/axiom-config";
 
 const config = await loadConfig({
@@ -450,11 +450,11 @@ const config = await loadConfig({
 });
 
 console.log(config.aws.region); // "us-west-1"
-\`\`\`
+```
 
 ### Load from Subdirectory
 
-\`\`\`typescript
+```typescript
 import { loadConfig } from "@dsmrt/axiom-config";
 import { resolve } from "node:path";
 
@@ -462,11 +462,11 @@ const config = await loadConfig({
   env: "dev",
   cwd: resolve(__dirname, "packages/api"),
 });
-\`\`\`
+```
 
 ### Using with AWS SDK
 
-\`\`\`typescript
+```typescript
 import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
 import { fromIni } from "@aws-sdk/credential-providers";
 import { loadConfig } from "@dsmrt/axiom-config";
@@ -486,7 +486,7 @@ const result = await client.send(
 );
 
 console.log(result.Parameter?.Value);
-\`\`\`
+```
 
 ---
 
@@ -496,7 +496,7 @@ console.log(result.Parameter?.Value);
 
 TypeScript configs provide type safety and IntelliSense:
 
-\`\`\`typescript
+```typescript
 // .axiom.ts
 import type { Config } from "@dsmrt/axiom-config";
 
@@ -513,13 +513,13 @@ const config: Config = {
 };
 
 export default config;
-\`\`\`
+```
 
 ### 2. **Keep Secrets in SSM**
 
 Never commit secrets to your config files. Store them in SSM:
 
-\`\`\`typescript
+```typescript
 // ❌ Bad: secrets in config
 const config = {
   apiKey: "sk_live_abc123", // Don't do this!
@@ -528,24 +528,24 @@ const config = {
 // ✅ Good: reference SSM parameters
 const config = await loadConfig({ env: "prod" });
 const apiKey = await getParameter(config.asParameterPath("api-key"));
-\`\`\`
+```
 
 ### 3. **Use Environment-Specific Configs**
 
 Keep environment-specific settings in separate files:
 
-\`\`\`
+```
 .axiom.ts         # Base/production config
 .axiom.dev.ts     # Development overrides
 .axiom.staging.ts # Staging overrides
 .axiom.test.ts    # Test overrides
-\`\`\`
+```
 
 ### 4. **Organize Parameters by Service**
 
 Structure your SSM parameters hierarchically:
 
-\`\`\`
+```
 /my-app/prod/
   ├── database/
   │   ├── host
@@ -556,19 +556,19 @@ Structure your SSM parameters hierarchically:
   │   └── secret
   └── features/
       └── new-ui-enabled
-\`\`\`
+```
 
 ### 5. **Use Secure Parameters for Sensitive Data**
 
-Always use \`--secure=true\` (the default) for sensitive values:
+Always use `--secure=true` (the default) for sensitive values:
 
-\`\`\`bash
+```bash
 # Secure parameter (encrypted with AWS KMS)
 axiom params set database/password "secret" --env prod
 
 # Non-secure only for non-sensitive data
 axiom params set app/version "1.0.0" --secure=false --env prod
-\`\`\`
+```
 
 ---
 
@@ -576,7 +576,7 @@ axiom params set app/version "1.0.0" --secure=false --env prod
 
 ### AWS CDK Integration
 
-\`\`\`typescript
+```typescript
 // lib/my-stack.ts
 import { Stack, StackProps } from "aws-cdk-lib";
 import { Construct } from "constructs";
@@ -600,11 +600,11 @@ export class MyStack extends Stack {
     );
   }
 }
-\`\`\`
+```
 
 ### Express.js Application
 
-\`\`\`typescript
+```typescript
 // src/config.ts
 import { loadConfig } from "@dsmrt/axiom-config";
 import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
@@ -649,13 +649,13 @@ const app = express();
 const config = await initConfig();
 
 app.listen(config.port, () => {
-  console.log(\`Server running in \${config.env} mode on port \${config.port}\`);
+  console.log(`Server running in \${config.env} mode on port \${config.port}`);
 });
-\`\`\`
+```
 
 ### CI/CD Pipeline
 
-\`\`\`yaml
+```yaml
 # .github/workflows/deploy.yml
 name: Deploy
 
@@ -688,7 +688,7 @@ jobs:
 
       - name: Deploy
         run: npm run deploy
-\`\`\`
+```
 
 ---
 
@@ -729,6 +729,6 @@ Found a bug or want to contribute? Visit our [GitHub repository](https://github.
 
 For detailed API documentation, see the TypeScript definitions in each package:
 
-- [\`@dsmrt/axiom-config\` API](./config/src/index.ts)
-- [\`@dsmrt/axiom-cli\` API](./cli/src/index.ts)
-- [\`@dsmrt/axiom-aws-sdk\` API](./aws-sdk/src/index.ts)
+- [`@dsmrt/axiom-config` API](./config/src/index.ts)
+- [`@dsmrt/axiom-cli` API](./cli/src/index.ts)
+- [`@dsmrt/axiom-aws-sdk` API](./aws-sdk/src/index.ts)
