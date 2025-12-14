@@ -280,5 +280,4 @@ const config: Partial<Config> = {`;
 export default config;
 `;
 	}
-
 }
