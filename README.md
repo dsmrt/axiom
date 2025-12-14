@@ -220,6 +220,7 @@ Available for all commands:
 | Option | Alias | Description | Default |
 |--------|-------|-------------|---------|
 | `--env` | `-e` | Environment name (loads `.axiom.<env>.ts`) | Uses base config |
+| `--debug` | `-d` | Enable debug output to stderr | `false` |
 | `--help` | `-h` | Show help | - |
 | `--version` | `-v` | Show version | - |
 
@@ -393,6 +394,169 @@ axiom params delete /my-app/staging/deprecated-value --env staging
 ```
 👍
 ```
+
+---
+
+## 🐛 Debugging
+
+Axiom provides comprehensive debug output to help troubleshoot configuration loading and CLI operations.
+
+### Enable Debug Mode
+
+There are two ways to enable debug output:
+
+#### 1. Using the `--debug` Flag (CLI Only)
+
+Add the `--debug` or `-d` flag to any CLI command:
+
+```bash
+# Debug config loading
+axiom config --debug
+axiom config --env dev --debug
+
+# Debug parameter operations
+axiom params get --debug
+axiom params set myParam "value" --debug
+axiom params delete oldParam --debug
+```
+
+#### 2. Using Environment Variable (CLI and Programmatic)
+
+Set the `AXIOM_DEBUG` environment variable:
+
+```bash
+# Enable debug for CLI commands
+AXIOM_DEBUG=1 axiom config --env dev
+AXIOM_DEBUG=true axiom params get
+
+# Enable debug in your Node.js application
+AXIOM_DEBUG=1 node your-app.js
+```
+
+### Debug Output Examples
+
+When debug mode is enabled, you'll see detailed information about what Axiom is doing:
+
+#### Config Loading Debug Output
+
+```bash
+$ axiom config --env dev --debug
+
+[axiom:cli] Config command handler called with env: dev
+[axiom:cli] Loading config with env: dev
+[axiom:config] Loading config with options: {"env":"dev","hasOverrides":false}
+[axiom:config] Looking for base config file...
+[axiom:config] Searching for config files: .axiom.json, .axiom.js, .axiom.mjs, .axiom.ts, .axiom.mts from current directory
+[axiom:config] Found config file: /Users/you/project/.axiom.ts
+[axiom:config] Loading base config from: /Users/you/project/.axiom.ts
+[axiom:config] Attempting to import config from: /Users/you/project/.axiom.ts
+[axiom:config] Loading TypeScript/ESM config file: /Users/you/project/.axiom.ts
+[axiom:config] Successfully loaded TS/ESM config with name: my-app
+[axiom:config] Base config loaded: my-app (env: prod)
+[axiom:config] Looking for environment-specific config for: dev
+[axiom:config] Searching for config files: .axiom.dev.json, .axiom.dev.js, .axiom.dev.mjs, .axiom.dev.ts, .axiom.dev.mts from current directory
+[axiom:config] Found config file: /Users/you/project/.axiom.dev.ts
+[axiom:config] Loading env config from: /Users/you/project/.axiom.dev.ts
+[axiom:config] Attempting to import config from: /Users/you/project/.axiom.dev.ts
+[axiom:config] Loading TypeScript/ESM config file: /Users/you/project/.axiom.dev.ts
+[axiom:config] Successfully loaded TS/ESM config with name: my-app
+[axiom:config] Env config loaded: my-app (env: dev)
+[axiom:config] Merged env config with overrides
+[axiom:config] Final config: my-app (env: dev, isProd: false)
+[axiom:cli] Config loaded successfully, outputting as JSON
+```
+
+#### Parameter Get Debug Output
+
+```bash
+$ axiom params get database/password --debug
+
+[axiom:cli] Get command handler called with path: database/password, env: undefined
+[axiom:config] Loading config with options: {"hasOverrides":false}
+[axiom:config] Looking for base config file...
+[axiom:config] Found config file: /Users/you/project/.axiom.ts
+[axiom:config] Successfully loaded config with name: my-app
+[axiom:cli] Config loaded, base parameter path: /my-app/prod
+[axiom:cli] Creating SSM client with region: us-east-1, profile: prod-profile
+[axiom:cli] Fetching parameters from: /my-app/prod/database/password
+[axiom:cli] Retrieved 1 parameter(s)
+```
+
+#### Parameter Set Debug Output
+
+```bash
+$ axiom params set api-key "sk_live_abc123" --debug --force
+
+[axiom:cli] Set command handler called with path: api-key, value: [REDACTED], options: {"force":true,"secure":true,"overwrite":true}
+[axiom:config] Loading config...
+[axiom:config] Successfully loaded config: my-app
+[axiom:cli] Config loaded, base parameter path: /my-app/prod
+[axiom:cli] Full parameter path: /my-app/prod/api-key
+[axiom:cli] Skipping confirmation (--force flag set)
+[axiom:cli] Creating SSM client with region: us-east-1, profile: prod-profile
+[axiom:cli] Setting parameter as SecureString
+[axiom:cli] Parameter set successfully, version: 3
+```
+
+### What Debug Output Shows
+
+Debug output helps you understand:
+
+- ✅ **Config file discovery** - Which files Axiom is searching for and finding
+- ✅ **Config loading process** - How base and environment-specific configs are loaded and merged
+- ✅ **Path resolution** - How parameter paths are resolved from relative to absolute
+- ✅ **AWS operations** - SSM client creation and parameter operations
+- ✅ **Error context** - Debug messages appear before errors to show what was attempted
+- ✅ **Merge behavior** - How environment-specific configs override base config values
+
+### Debug in Programmatic Usage
+
+When using `@dsmrt/axiom-config` in your code, enable debug output with the environment variable:
+
+```typescript
+// Enable debug output
+process.env.AXIOM_DEBUG = "true";
+
+import { loadConfig } from "@dsmrt/axiom-config";
+
+const config = await loadConfig({ env: "dev" });
+// Debug messages will be printed to stderr
+```
+
+### Troubleshooting Tips
+
+If you're experiencing issues:
+
+1. **Config not found**: Debug output shows which files are being searched and where
+   ```bash
+   axiom config --debug
+   # Look for "[axiom:config] Searching for config files: ..."
+   ```
+
+2. **Wrong environment loaded**: Debug shows config merge process
+   ```bash
+   axiom config --env dev --debug
+   # Look for "[axiom:config] Env config loaded: ..."
+   ```
+
+3. **Parameter path issues**: Debug shows full resolved paths
+   ```bash
+   axiom params get myParam --debug
+   # Look for "[axiom:cli] Full parameter path: ..."
+   ```
+
+4. **AWS credential issues**: Debug shows which profile and region are used
+   ```bash
+   axiom params get --debug
+   # Look for "[axiom:cli] Creating SSM client with region: ..., profile: ..."
+   ```
+
+### Debug Output Location
+
+Debug messages are written to **stderr** (not stdout), which means:
+- They won't interfere with JSON output or piped commands
+- They can be redirected separately: `axiom config --debug 2>debug.log`
+- They won't appear in automated scripts unless stderr is captured
 
 ---
 
