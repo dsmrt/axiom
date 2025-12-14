@@ -1,5 +1,16 @@
 # @dsmrt/axiom-cli
 
+## 1.3.0
+
+### Minor Changes
+
+- 5edaee0: load config by env
+
+### Patch Changes
+
+- Updated dependencies [5edaee0]
+  - @dsmrt/axiom-config@1.2.0
+
 ## 1.2.0
 
 ### Minor Changes

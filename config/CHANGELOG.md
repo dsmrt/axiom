@@ -1,5 +1,11 @@
 # @dsmrt/axiom-config
 
+## 1.2.0
+
+### Minor Changes
+
+- 5edaee0: load config by env
+
 ## 1.1.0
 
 ### Minor Changes
