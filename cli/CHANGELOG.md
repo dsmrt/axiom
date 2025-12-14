@@ -1,5 +1,11 @@
 # @dsmrt/axiom-cli
 
+## 1.2.0
+
+### Minor Changes
+
+- 6c846be: adding cli subcommand for init for config files
+
 ## 1.1.0
 
 ### Minor Changes
