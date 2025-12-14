@@ -1,5 +1,16 @@
 # @dsmrt/axiom-cli
 
+## 1.1.0
+
+### Minor Changes
+
+- b1a56bc: adding debug logging to the cli and config packages
+
+### Patch Changes
+
+- Updated dependencies [b1a56bc]
+  - @dsmrt/axiom-config@1.1.0
+
 ## 1.0.0
 
 ### Major Changes
