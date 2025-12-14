@@ -10,6 +10,7 @@ import type { ArgumentsCamelCase, Argv, CommandModule } from "yargs";
 import { CachedCredentialProvider } from "../../aws/credentials-provider";
 import { awsOptions, commonOptions } from "../../options";
 import { buildPath } from "./utils";
+import { debug } from "../../debug";
 
 export interface SetOptions extends AwsConfigs {
 	env: string;
@@ -64,9 +65,16 @@ export class SetCommand<U extends SetOptions>
 	};
 
 	public handler = async (args: ArgumentsCamelCase<U>) => {
+		debug(`Set command handler called with path: ${args.path}, secure: ${args.secure}, overwrite: ${args.overwrite}, force: ${args.force}`);
+
 		const config = await loadConfig({ env: args.env });
+		debug(`Config loaded successfully, base parameter path: ${config.aws?.baseParameterPath}`);
+
+		const fullPath = buildPath(config, args.path);
+		debug(`Full parameter path: ${fullPath}`);
 
 		if (args.force !== true) {
+			debug(`Prompting user for confirmation...`);
 			const res = await inquirer.prompt({
 				type: "confirm",
 				name: "setParam",
@@ -74,25 +82,32 @@ export class SetCommand<U extends SetOptions>
 			});
 
 			if (!res.setParam) {
+				debug(`User declined, aborting`);
 				console.log("Doing nothing.");
 				return;
 			}
+			debug(`User confirmed`);
+		} else {
+			debug(`Force flag set, skipping confirmation`);
 		}
 
+		debug(`Creating SSM client with region: ${config.aws.region}, profile: ${config.aws.profile}`);
 		const client = new SSMClient({
 			region: config.aws.region,
 			credentials: await CachedCredentialProvider(config.aws),
 		});
 
+		debug(`Sending parameter to SSM with type: ${args.secure ? "SecureString" : "String"}`);
 		const params = await client.send(
 			new PutParameterCommand({
-				Name: buildPath(config, args.path),
+				Name: fullPath,
 				Value: args.value,
 				Type: args.secure ? ParameterType.SECURE_STRING : ParameterType.STRING,
 				Overwrite: args.overwrite,
 			}),
 		);
 
+		debug(`Parameter set successfully, version: ${params.Version}`);
 		console.log(chalk.green("Version: "), chalk.white.bold(params.Version));
 	};
 }

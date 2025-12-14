@@ -5,6 +5,7 @@ import chalk from "chalk";
 import type { ArgumentsCamelCase, Argv, CommandModule } from "yargs";
 import { CachedCredentialProvider } from "../../aws/credentials-provider";
 import { awsOptions, commonOptions } from "../../options";
+import { debug } from "../../debug";
 
 export interface GetOptions {
 	env: string;
@@ -32,8 +33,12 @@ export class GetCommand<U extends GetOptions>
 	};
 
 	public handler = async (args: ArgumentsCamelCase<U>) => {
-		const config = await loadConfig({ env: args.env });
+		debug(`Get command handler called with env: ${args.env}, path: ${args.path}`);
 
+		const config = await loadConfig({ env: args.env });
+		debug(`Config loaded successfully, base parameter path: ${config.aws?.baseParameterPath}`);
+
+		debug(`Creating SSM client with region: ${config.aws.region}, profile: ${config.aws.profile}`);
 		const collection = new ParameterCollection(
 			config.aws?.baseParameterPath,
 			new SSMClient({
@@ -47,7 +52,9 @@ export class GetCommand<U extends GetOptions>
 			}),
 		);
 
+		debug(`Fetching parameters from SSM...`);
 		const params = await collection.get();
+		debug(`Retrieved ${params.size} parameters`);
 
 		params.forEach((parameter: Parameter) => {
 			console.log(

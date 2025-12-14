@@ -1,6 +1,16 @@
 import { readFileSync } from "node:fs";
 import { sync as findUpSync } from "find-up";
 
+// Debug utility - controlled by AXIOM_DEBUG environment variable
+const isDebugEnabled = () =>
+	process.env.AXIOM_DEBUG === "true" || process.env.AXIOM_DEBUG === "1";
+
+const debug = (message: string, ...args: unknown[]) => {
+	if (isDebugEnabled()) {
+		console.error(`[axiom:config] ${message}`, ...args);
+	}
+};
+
 export interface AwsConfigs {
 	account: string;
 	region: string;
@@ -65,46 +75,89 @@ export interface LoadConfigInput {
 
 // TODO - Add validation here
 export const importConfigFromPath = async (path: string): Promise<Config> => {
+	debug(`Attempting to import config from: ${path}`);
+
 	if (/\.json$/.test(path)) {
-		return JSON.parse(readFileSync(path).toString()) as Config;
+		debug(`Loading JSON config file: ${path}`);
+		try {
+			const config = JSON.parse(readFileSync(path).toString()) as Config;
+			debug(`Successfully loaded JSON config with name: ${config.name}`);
+			return config;
+		} catch (error) {
+			debug(`Failed to parse JSON config: ${error}`);
+			throw error;
+		}
 	}
 
 	// Use dynamic import for TypeScript (.ts, .mts) files to support Node 22+ native TS
 	// also use dynamic import if mjs
 	if (/\.((m)?ts|mjs)$/.test(path)) {
-		const loaded = await import(path);
-		// Handle both default exports and named exports
-		return (loaded.default || loaded) as Config;
+		debug(`Loading TypeScript/ESM config file: ${path}`);
+		try {
+			const loaded = await import(path);
+			const config = (loaded.default || loaded) as Config;
+			debug(`Successfully loaded TS/ESM config with name: ${config.name}`);
+			return config;
+		} catch (error) {
+			debug(`Failed to import TS/ESM config: ${error}`);
+			throw error;
+		}
 	}
 
 	// Use require for JavaScript files (.js, .mjs)
 	if (/\.(m)?js$/.test(path)) {
-		const loaded = require(path);
-		return (loaded.default || loaded) as Config;
+		debug(`Loading JavaScript config file: ${path}`);
+		try {
+			const loaded = require(path);
+			const config = (loaded.default || loaded) as Config;
+			debug(`Successfully loaded JS config with name: ${config.name}`);
+			return config;
+		} catch (error) {
+			debug(`Failed to require JS config: ${error}`);
+			throw error;
+		}
 	}
 
+	debug(`Unsupported file type: ${path}`);
 	throw new Error(`Unsupported file type or path not found: ${path}`);
 };
 
 export const loadConfig = async <T extends object>(
 	input?: LoadConfigInput,
 ): Promise<ConfigContainer & T> => {
+	debug(
+		`Loading config with options:`,
+		JSON.stringify({ env: input?.env, cwd: input?.cwd, hasOverrides: !!input?.overrides }),
+	);
+
 	// get the base file
+	debug(`Looking for base config file...`);
 	const baseConfigFile = configPath({
 		...input,
 		env: undefined,
 	});
 
+	debug(`Loading base config from: ${baseConfigFile}`);
 	const baseConfig = await importConfigFromPath(baseConfigFile);
+	debug(`Base config loaded: ${baseConfig.name} (env: ${baseConfig.env})`);
+
 	let overrides = input?.overrides || {};
 
 	// get the environment file
 	if (input?.env) {
-		const devConfig = await importConfigFromPath(configPath(input));
+		debug(`Looking for environment-specific config for: ${input.env}`);
+		const envConfigPath = configPath(input);
+		debug(`Loading env config from: ${envConfigPath}`);
+		const devConfig = await importConfigFromPath(envConfigPath);
+		debug(`Env config loaded: ${devConfig.name} (env: ${devConfig.env})`);
 		overrides = mergeDeep(devConfig, overrides);
+		debug(`Merged env config with overrides`);
 	}
 
 	const configObject = mergeDeep(baseConfig, overrides);
+	debug(
+		`Final config: ${configObject.name} (env: ${configObject.env}, isProd: ${configObject.env === (configObject.prodEnvName || "prod")})`,
+	);
 
 	// merge env file
 	return new ConfigContainer(configObject) as ConfigContainer & T;
@@ -142,21 +195,30 @@ export function mergeDeep(target: any, ...sources: any[]) {
 
 export const configPath = (input?: LoadConfigInput): string => {
 	const envIndicator = input?.env ? `.${input.env}` : "";
-	const p = findUpSync(
-		[
-			`.axiom${envIndicator}.json`,
-			`.axiom${envIndicator}.js`,
-			`.axiom${envIndicator}.mjs`,
-			`.axiom${envIndicator}.ts`,
-			`.axiom${envIndicator}.mts`,
-		],
-		{ cwd: input?.cwd },
+	const searchPatterns = [
+		`.axiom${envIndicator}.json`,
+		`.axiom${envIndicator}.js`,
+		`.axiom${envIndicator}.mjs`,
+		`.axiom${envIndicator}.ts`,
+		`.axiom${envIndicator}.mts`,
+	];
+
+	debug(
+		`Searching for config files: ${searchPatterns.join(", ")}`,
+		input?.cwd ? `from ${input.cwd}` : "from current directory",
 	);
 
-	if (p === undefined)
+	const p = findUpSync(searchPatterns, { cwd: input?.cwd });
+
+	if (p === undefined) {
+		debug(
+			`Config file not found! Searched for: ${searchPatterns.join(", ")}`,
+		);
 		throw new Error(
 			`Axiom config files not found: .axiom${envIndicator}.json, .axiom${envIndicator}.js .axiom${envIndicator}.ts`,
 		);
+	}
 
+	debug(`Found config file: ${p}`);
 	return p;
 };

@@ -4,6 +4,7 @@ import inquirer from "inquirer";
 import type { ArgumentsCamelCase, Argv, CommandModule } from "yargs";
 import { CachedCredentialProvider } from "../../aws/credentials-provider";
 import { buildPath } from "./utils";
+import { debug } from "../../debug";
 
 const log = console.log;
 type Path = string;
@@ -44,20 +45,29 @@ export class DeleteCommand<U extends config>
 	};
 
 	public handler = async (args: ArgumentsCamelCase<U>) => {
+		debug(`Delete command handler called with path: ${args.path}, force: ${args.force}`);
+
 		const config = await loadConfig({ env: args.env });
+		debug(`Config loaded successfully, base parameter path: ${config.aws?.baseParameterPath}`);
+
 		const path = buildPath(args, args.path);
+		debug(`Full parameter path: ${path}`);
+
+		debug(`Creating SSM client with region: ${config.aws?.region}, profile: ${config.aws?.profile}`);
 		const client = new SSMClient({
 			region: config.aws?.region,
 			credentials: await CachedCredentialProvider(config.aws),
 		});
 
 		if (path === args.aws.baseParameterPath) {
+			debug(`Delete blocked: path matches base parameter path`);
 			throw new Error(
 				`Deleting the path (path: ${path}) that matches the base path (awsSsmParameterPath: ${args.awsSsmParameterPath}) is prohibited.`,
 			);
 		}
 
 		if (args.force !== true) {
+			debug(`Prompting user for confirmation...`);
 			const res = await inquirer.prompt({
 				type: "confirm",
 				name: "delete",
@@ -65,17 +75,23 @@ export class DeleteCommand<U extends config>
 			});
 
 			if (!res.delete) {
+				debug(`User declined, aborting`);
 				log("Doing nothing.");
 				return;
 			}
+			debug(`User confirmed`);
+		} else {
+			debug(`Force flag set, skipping confirmation`);
 		}
 
+		debug(`Sending delete command to SSM for: ${path}`);
 		await client.send(
 			new DeleteParameterCommand({
 				Name: path,
 			}),
 		);
 
+		debug(`Parameter deleted successfully`);
 		log("👍");
 	};
 }
