@@ -76,7 +76,10 @@ describe("load configs", () => {
 
 		expect(jsonPath).toBe(MOCK_AXIOM_JSON_CONFIG_DEV);
 
-		const config = await loadConfig({ env: "dev", cwd: MOCK_AXIOM_JS_CONFIG_DIR });
+		const config = await loadConfig({
+			env: "dev",
+			cwd: MOCK_AXIOM_JS_CONFIG_DIR,
+		});
 
 		expect(config.env).toBe("dev");
 		expect(config.aws.region).toBe("us-east-1");
@@ -103,6 +106,47 @@ describe("load configs", () => {
 		expect(jsonConfig.asParameterPath("my-secret")).toBe("/dev-path/my-secret");
 		const jsConfig = await loadConfig({ cwd: MOCK_AXIOM_JS_CONFIG_DIR });
 		expect(jsConfig.asParameterPath("my-secret")).toBe("/prod-path/my-secret");
+	});
+
+	it("test asParameterPath strips trailing slashes", async () => {
+		const config = await loadConfig({
+			cwd: MOCK_AXIOM_JSON_CONFIG_DIR,
+			overrides: {
+				aws: {
+					baseParameterPath: "/prod-path///",
+				},
+			},
+		});
+		expect(config.asParameterPath("my-secret")).toBe("/prod-path/my-secret");
+	});
+
+	it("test loadConfig with overrides", async () => {
+		const config = await loadConfig({
+			cwd: MOCK_AXIOM_JSON_CONFIG_DIR,
+			overrides: {
+				name: "overridden-name",
+				aws: {
+					account: "override-account",
+				},
+			},
+		});
+		expect(config.name).toBe("overridden-name");
+		expect(config.aws.account).toBe("override-account");
+		// Original values should still be there
+		expect(config.env).toBe("prod");
+	});
+
+	it("test configPath throws when config not found", () => {
+		expect(() => configPath({ cwd: "/non/existent/path" })).toThrow(
+			"Axiom config files not found",
+		);
+	});
+
+	it("test importConfigFromPath throws for unsupported file type", async () => {
+		await expect(async () => {
+			const { importConfigFromPath } = await import("./index");
+			await importConfigFromPath("/some/path/config.txt");
+		}).rejects.toThrow("Unsupported file type or path not found");
 	});
 });
 

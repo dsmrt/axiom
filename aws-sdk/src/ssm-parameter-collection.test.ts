@@ -73,4 +73,24 @@ describe("Parameter Collection", () => {
 
 		expect((await collection.findParam("env/one"))?.Value).toBe("one");
 	});
+
+	it("Should call loadParameters only once when already loaded", async () => {
+		const collection = new ParameterCollection(basePath);
+
+		// First call loads parameters
+		await collection.get();
+
+		// Second call should not load again (map is already populated)
+		const params = await collection.get();
+
+		expect(params.size).toBeGreaterThan(0);
+	});
+
+	it("hasParam should call loadParameters if not already loaded", async () => {
+		const collection = new ParameterCollection(basePath);
+
+		const result = await collection.hasParam("one");
+
+		expect(result).toBe(true);
+	});
 });
