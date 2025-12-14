@@ -226,6 +226,129 @@ Available for all commands:
 
 ### Commands
 
+#### `axiom init`
+
+Initialize Axiom configuration files in your project with an interactive setup wizard.
+
+**Usage:**
+```bash
+axiom init [options]
+```
+
+**Options:**
+| Option | Type | Description |
+|--------|------|-------------|
+| `--name` | string | Project name (defaults to interactive prompt) |
+| `--account` | string | AWS account ID (defaults to interactive prompt) |
+| `--region` | string | AWS region (defaults to interactive prompt) |
+| `--profile` | string | AWS profile name (defaults to interactive prompt) |
+| `--custom-types` | boolean | Create custom types file for extending config |
+| `--force` / `-f` | boolean | Overwrite existing config files |
+
+**Interactive Mode (Recommended):**
+```bash
+axiom init
+```
+
+This will prompt you for:
+- Project name
+- AWS account ID (with validation)
+- AWS region
+- AWS profile name
+- Whether to create custom types file
+
+**Non-Interactive Mode:**
+```bash
+# Provide all options via CLI flags
+axiom init \
+  --name "my-app" \
+  --account "123456789012" \
+  --region "us-west-2" \
+  --profile "production" \
+  --custom-types true \
+  --force
+```
+
+**Created Files:**
+
+1. **`.axiom.ts`** - Base production configuration
+   ```typescript
+   import type { Config } from "@dsmrt/axiom-config";
+
+   const config: Config = {
+     name: "my-app",
+     env: "prod",
+     aws: {
+       account: "123456789012",
+       region: "us-west-2",
+       profile: "production",
+     },
+     baseParameterPath: "/my-app/prod",
+   };
+
+   export default config;
+   ```
+
+2. **`.axiom.dev.ts`** - Development environment overrides
+   ```typescript
+   import type { Config } from "@dsmrt/axiom-config";
+
+   const config: Partial<Config> = {
+     env: "dev",
+     baseParameterPath: undefined, // Auto-generated as /{name}/dev
+   };
+
+   export default config;
+   ```
+
+3. **`axiom.config.d.ts`** (optional) - Custom configuration types
+   ```typescript
+   export interface CustomConfig {
+     // Add your custom properties here
+     // Example:
+     // apiUrl: string;
+     // maxRetries: number;
+   }
+   ```
+
+**With Custom Types:**
+
+When you create custom types, your `.axiom.ts` will include type extensions:
+
+```typescript
+import type { Config } from "@dsmrt/axiom-config";
+import type { CustomConfig } from "./axiom.config";
+
+type AxiomConfig = Config & CustomConfig;
+
+const config: AxiomConfig = {
+  name: "my-app",
+  env: "prod",
+  aws: {
+    account: "123456789012",
+    region: "us-west-2",
+    profile: "production",
+  },
+  baseParameterPath: "/my-app/prod",
+
+  // Your custom properties (type-safe!)
+  apiUrl: "https://api.example.com",
+  maxRetries: 3,
+};
+
+export default config;
+```
+
+**Next Steps After Init:**
+1. Edit `.axiom.ts` to customize your base configuration
+2. Edit `.axiom.dev.ts` to customize development settings
+3. If created, edit `axiom.config.d.ts` to add custom properties
+4. Run `axiom config` to verify your configuration
+5. Add `.axiom*.ts` files to your version control
+6. Consider creating additional environment configs (`.axiom.staging.ts`, `.axiom.prod.ts`, etc.)
+
+---
+
 #### `axiom config`
 
 Display the loaded configuration for an environment.
