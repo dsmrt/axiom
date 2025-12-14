@@ -122,6 +122,13 @@ export const importConfigFromPath = async (path: string): Promise<Config> => {
 	throw new Error(`Unsupported file type or path not found: ${path}`);
 };
 
+export const loadConfigByEnv = async <T extends object>(
+	env: string,
+	options?: Omit<LoadConfigInput, "env">,
+): Promise<ConfigContainer & T> => {
+	return await loadConfig({ env: env, ...options });
+};
+
 export const loadConfig = async <T extends object>(
 	input?: LoadConfigInput,
 ): Promise<ConfigContainer & T> => {

@@ -150,6 +150,75 @@ describe("load configs", () => {
 	});
 });
 
+describe("loadConfigByEnv", () => {
+	afterEach(() => {
+		vi.clearAllMocks();
+	});
+
+	it("should load config by environment name", async () => {
+		const { loadConfigByEnv } = await import("./index");
+		const config = await loadConfigByEnv("dev", {
+			cwd: MOCK_AXIOM_JSON_CONFIG_DIR,
+		});
+
+		expect(config.env).toBe("dev");
+		expect(config.aws.region).toBe("us-north-1");
+		expect(config.name).toBe("my-prod-app");
+	});
+
+	it("should return ConfigContainer instance with methods", async () => {
+		const { loadConfigByEnv } = await import("./index");
+		const config = await loadConfigByEnv("dev", {
+			cwd: MOCK_AXIOM_JSON_CONFIG_DIR, // JSON dev config has /dev-path
+		});
+
+		expect(config.env).toBe("dev");
+		expect(config.isProd()).toBeFalsy();
+		expect(typeof config.asParameterPath).toBe("function");
+		expect(config.asParameterPath("test")).toBe("/dev-path/test");
+	});
+
+	it("should work with custom type extensions", async () => {
+		interface CustomConfig {
+			customProp: string;
+		}
+
+		const { loadConfigByEnv } = await import("./index");
+		const config = await loadConfigByEnv<CustomConfig>("dev", {
+			cwd: MOCK_AXIOM_JSON_CONFIG_DIR,
+			overrides: {
+				customProp: "custom-value",
+			},
+		});
+
+		expect(config.env).toBe("dev");
+		expect(config.customProp).toBe("custom-value");
+	});
+
+	it("should support cwd option", async () => {
+		const { loadConfigByEnv } = await import("./index");
+		const config = await loadConfigByEnv("dev", {
+			cwd: MOCK_AXIOM_JS_CONFIG_DIR,
+		});
+
+		expect(config.env).toBe("dev");
+		expect(config.aws.region).toBe("us-east-1"); // from dev config
+	});
+
+	it("should support overrides option", async () => {
+		const { loadConfigByEnv } = await import("./index");
+		const config = await loadConfigByEnv("dev", {
+			cwd: MOCK_AXIOM_JSON_CONFIG_DIR,
+			overrides: {
+				name: "overridden-by-loadConfigByEnv",
+			},
+		});
+
+		expect(config.name).toBe("overridden-by-loadConfigByEnv");
+		expect(config.env).toBe("dev");
+	});
+});
+
 // describe("load TypeScript configs", () => {
 // 	afterEach(() => {
 // 		vi.clearAllMocks();

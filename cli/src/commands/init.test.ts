@@ -125,7 +125,7 @@ describe("Init command", () => {
 
 		const configPath = join(testDir, ".axiom.ts");
 		const content = readFileSync(configPath, "utf-8");
-		expect(content).toContain('import type { CustomConfig } from');
+		expect(content).toContain("import type { CustomConfig } from");
 		expect(content).toContain("type AxiomConfig = Config & CustomConfig");
 		expect(content).toContain("const config: AxiomConfig");
 	});

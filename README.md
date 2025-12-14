@@ -703,6 +703,43 @@ console.log(devConfig.env); // "dev"
 console.log(devConfig.aws.account); // dev account ID
 ```
 
+### Using `loadConfigByEnv`
+
+For simpler cases where you only need to specify the environment, use the `loadConfigByEnv` helper:
+
+```typescript
+import { loadConfigByEnv } from "@dsmrt/axiom-config";
+
+// Load dev config - simpler than loadConfig({ env: "dev" })
+const devConfig = await loadConfigByEnv("dev");
+console.log(devConfig.env); // "dev"
+console.log(devConfig.isProd()); // false
+
+// Load staging config
+const stagingConfig = await loadConfigByEnv("staging");
+console.log(stagingConfig.env); // "staging"
+```
+
+You can also pass additional options:
+
+```typescript
+import { loadConfigByEnv } from "@dsmrt/axiom-config";
+
+// With custom working directory
+const config = await loadConfigByEnv("dev", {
+  cwd: "/path/to/project",
+});
+
+// With overrides
+const configWithOverrides = await loadConfigByEnv("prod", {
+  overrides: {
+    aws: {
+      region: "eu-west-1",
+    },
+  },
+});
+```
+
 ### With Custom Properties
 
 ```typescript
