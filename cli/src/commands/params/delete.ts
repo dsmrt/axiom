@@ -23,17 +23,14 @@ export class DeleteCommand<U extends config>
 
 	protected client: SSMClient | undefined;
 	builder = (args: Argv): Argv<U> => {
-		const config = loadConfig();
+		// Note: builder must be synchronous, so we can't await here
+		// The config loading will happen in the handler
 		args
 			.positional("path", {
 				type: "string",
 				describe:
 					`Path to parameter. Supports absolute and relative paths.` +
-					`\nExample: "/root/myParam" or "service/secret" (which translates to, "${buildPath(
-						config,
-						"service/secret",
-					)})`,
-				default: config.aws?.baseParameterPath,
+					`\nExample: "/root/myParam" or "service/secret"`,
 				demandOption: true,
 			})
 			.demandOption("path", "Path is required");
@@ -47,7 +44,7 @@ export class DeleteCommand<U extends config>
 	};
 
 	public handler = async (args: ArgumentsCamelCase<U>) => {
-		const config = loadConfig({ env: args.env });
+		const config = await loadConfig({ env: args.env });
 		const path = buildPath(args, args.path);
 		const client = new SSMClient({
 			region: config.aws?.region,

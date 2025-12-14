@@ -4,7 +4,7 @@ import type { Config } from "@dsmrt/axiom-config";
 
 vi.mock("@dsmrt/axiom-config", () => {
   return {
-    loadConfig: (): Config => {
+    loadConfig: async (): Promise<Config> => {
       return {
         name: "test",
         env: "test",

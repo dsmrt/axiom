@@ -64,58 +64,43 @@ export interface LoadConfigInput {
 }
 
 // TODO - Add validation here
-export const importConfigFromPath = (path: string): Config => {
+export const importConfigFromPath = async (path: string): Promise<Config> => {
 	if (/\.json$/.test(path)) {
 		return JSON.parse(readFileSync(path).toString()) as Config;
 	}
-	if (/\.(m)?[j|t]s$/.test(path)) {
-		// Register ts-node for TypeScript files if not already registered
-		if (/\.tsx?$/.test(path)) {
-			try {
-				// Check if ts-node is already registered
-				if (!process[Symbol.for("ts-node.register.instance")]) {
-					require("ts-node").register({
-						transpileOnly: true,
-						compilerOptions: {
-							module: "commonjs",
-							esModuleInterop: true,
-						},
-					});
-				}
-			} catch (error) {
-				console.error(error);
-				throw new Error(
-					`TypeScript files require ts-node to be installed. Run: pnpm add -D ts-node`,
-				);
-			}
-		}
-		/* eslint-disable */
-		// Clear the require cache for this path to ensure fresh loading
-		delete require.cache[require.resolve(path)];
-		const loaded = require(path);
-		// Handle both default exports and module.exports
+
+	// Use dynamic import for TypeScript (.ts, .mts) files to support Node 22+ native TS
+	// also use dynamic import if mjs
+	if (/\.((m)?ts|mjs)$/.test(path)) {
+		const loaded = await import(path);
+		// Handle both default exports and named exports
 		return (loaded.default || loaded) as Config;
 	}
 
-	throw new Error(`Path not found: {path}`);
+	// Use require for JavaScript files (.js, .mjs)
+	if (/\.(m)?js$/.test(path)) {
+		const loaded = require(path);
+		return (loaded.default || loaded) as Config;
+	}
+
+	throw new Error(`Unsupported file type or path not found: ${path}`);
 };
 
-export const loadConfig = <T extends object>(
+export const loadConfig = async <T extends object>(
 	input?: LoadConfigInput,
-): ConfigContainer & T => {
+): Promise<ConfigContainer & T> => {
 	// get the base file
 	const baseConfigFile = configPath({
 		...input,
 		env: undefined,
 	});
 
-	const baseConfig = importConfigFromPath(baseConfigFile);
-
+	const baseConfig = await importConfigFromPath(baseConfigFile);
 	let overrides = input?.overrides || {};
 
 	// get the environment file
 	if (input?.env) {
-		const devConfig = importConfigFromPath(configPath(input));
+		const devConfig = await importConfigFromPath(configPath(input));
 		overrides = mergeDeep(devConfig, overrides);
 	}
 
@@ -136,7 +121,8 @@ export function isObject(item: unknown) {
  * Deep merge two objects.
  */
 
-export function mergeDeep(target: object, ...sources: object[]) {
+// biome-ignore lint/suspicious/noExplicitAny: needs to be any for now
+export function mergeDeep(target: any, ...sources: any[]) {
 	if (!sources.length) return target;
 	const source = sources.shift();
 

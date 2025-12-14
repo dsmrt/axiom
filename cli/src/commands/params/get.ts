@@ -5,7 +5,6 @@ import chalk from "chalk";
 import type { ArgumentsCamelCase, Argv, CommandModule } from "yargs";
 import { CachedCredentialProvider } from "../../aws/credentials-provider";
 import { awsOptions, commonOptions } from "../../options";
-import { buildPath } from "./utils";
 
 export interface GetOptions {
 	env: string;
@@ -19,23 +18,21 @@ export class GetCommand<U extends GetOptions>
 	public describe = "Get all parameters under the base path";
 
 	public builder = (args: Argv): Argv<U> => {
-		const config = loadConfig();
+		// Note: builder must be synchronous, so we can't await here
+		// The config loading will happen in the handler
 		args.options({ ...commonOptions(), ...awsOptions() });
 		args.positional("path", {
 			type: "string",
 			describe:
 				`OPTIONAL path to parameter. Supports absolute and relative paths.\n` +
-				`Example:\n\t"/root/myParam" or "service/secret" (which translates to, "${buildPath(
-					config,
-					"service/secret",
-				)})`,
+				`Example:\n\t"/root/myParam" or "service/secret"`,
 		});
 
 		return args as unknown as Argv<U>;
 	};
 
 	public handler = async (args: ArgumentsCamelCase<U>) => {
-		const config = loadConfig({ env: args.env });
+		const config = await loadConfig({ env: args.env });
 
 		const collection = new ParameterCollection(
 			config.aws?.baseParameterPath,

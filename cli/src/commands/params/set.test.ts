@@ -36,7 +36,7 @@ const args: ArgumentsCamelCase = {
 
 vi.mock("@dsmrt/axiom-config", () => {
   return {
-    loadConfig: (): Config => config,
+    loadConfig: async (): Promise<Config> => config,
   };
 });
 
@@ -53,11 +53,11 @@ vi.mock("inquirer", () => {
 });
 
 describe("cli get command", () => {
-  it("test handler", () => {
+  it("test handler", async () => {
     const ssmClientMock = mockClient(SSMClient);
     ssmClientMock.on(PutParameterCommand).resolves({});
     const base = new SetCommand();
-    base.handler({ ...args, ...config, ...options });
+    await base.handler({ ...args, ...config, ...options });
     base.builder({
       positional: vi.fn(),
       option: vi.fn(),

@@ -27,7 +27,7 @@ const args: ArgumentsCamelCase = {
 
 vi.mock("@dsmrt/axiom-config", () => {
   return {
-    loadConfig: (): Config => config,
+    loadConfig: async (): Promise<Config> => config,
   };
 });
 
@@ -55,9 +55,9 @@ vi.mock("@dsmrt/axiom-aws-sdk", () => {
 });
 
 describe("cli get command", () => {
-  it("test handler", () => {
+  it("test handler", async () => {
     const base = new GetCommand();
-    base.handler({ ...args, ...config, ...options });
+    await base.handler({ ...args, ...config, ...options });
     expect(base.command).toBe("get [path]");
   });
 });

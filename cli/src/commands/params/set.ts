@@ -27,15 +27,13 @@ export class SetCommand<U extends SetOptions>
 	public describe = "Set all parameters under the base path";
 
 	public builder = (args: Argv): Argv<U> => {
-		const config = loadConfig();
+		// Note: builder must be synchronous, so we can't await here
+		// The config loading will happen in the handler
 		args.positional("path", {
 			type: "string",
 			describe:
 				`Path to parameter. Supports absolute and relative paths.` +
-				`\nExample: "/root/myParam" or "service/secret" (which translates to, "${buildPath(
-					config,
-					"service/secret",
-				)})`,
+				`\nExample: "/root/myParam" or "service/secret"`,
 		});
 		args.demandOption("path", "Path is required");
 		args.positional("value", {
@@ -66,7 +64,7 @@ export class SetCommand<U extends SetOptions>
 	};
 
 	public handler = async (args: ArgumentsCamelCase<U>) => {
-		const config = loadConfig({ env: args.env });
+		const config = await loadConfig({ env: args.env });
 
 		if (args.force !== true) {
 			const res = await inquirer.prompt({

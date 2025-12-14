@@ -1,7 +1,7 @@
 import type { Argv, CommandModule } from "yargs";
 import { DeleteCommand, GetCommand, SetCommand } from ".";
 
-type Options = Record<string, string>;
+type Options = object;
 
 export class ParamsCommand<U extends Options>
 	implements CommandModule<object, U>

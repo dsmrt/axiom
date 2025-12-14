@@ -4,7 +4,7 @@ import yargs from "yargs/yargs";
 
 vi.mock("@dsmrt/axiom-config", () => {
   return {
-    loadConfig: () => {
+    loadConfig: async () => {
       return {
         name: "test",
       };
@@ -15,7 +15,7 @@ vi.mock("@dsmrt/axiom-config", () => {
 describe("cli config command", () => {
   it("test handler", async () => {
     const config = new Config();
-    config.loadConfig({ env: "dev" });
+    await config.loadConfig({ env: "dev" });
     await yargs(["config"]).command(config).argv;
 
     expect(config.command).toBe("config");

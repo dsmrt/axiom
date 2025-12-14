@@ -28,7 +28,7 @@ const args: ArgumentsCamelCase = {
 
 vi.mock("@dsmrt/axiom-config", () => {
   return {
-    loadConfig: (): Config => config,
+    loadConfig: async (): Promise<Config> => config,
   };
 });
 
@@ -45,11 +45,11 @@ vi.mock("inquirer", () => {
 });
 
 describe("cli delete command", () => {
-  it("test handler", () => {
+  it("test handler", async () => {
     const base = new DeleteCommand();
     const ssmClientMock = mockClient(SSMClient);
     ssmClientMock.on(DeleteParameterCommand).resolves({});
-    base.handler({ ...args, ...config, ...options });
+    await base.handler({ ...args, ...config, ...options });
     expect(base.command).toBe("delete <path>");
   });
 
