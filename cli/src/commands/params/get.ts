@@ -33,12 +33,18 @@ export class GetCommand<U extends GetOptions>
 	};
 
 	public handler = async (args: ArgumentsCamelCase<U>) => {
-		debug(`Get command handler called with env: ${args.env}, path: ${args.path}`);
+		debug(
+			`Get command handler called with env: ${args.env}, path: ${args.path}`,
+		);
 
 		const config = await loadConfig({ env: args.env });
-		debug(`Config loaded successfully, base parameter path: ${config.aws?.baseParameterPath}`);
+		debug(
+			`Config loaded successfully, base parameter path: ${config.aws?.baseParameterPath}`,
+		);
 
-		debug(`Creating SSM client with region: ${config.aws.region}, profile: ${config.aws.profile}`);
+		debug(
+			`Creating SSM client with region: ${config.aws.region}, profile: ${config.aws.profile}`,
+		);
 		const collection = new ParameterCollection(
 			config.aws?.baseParameterPath,
 			new SSMClient({

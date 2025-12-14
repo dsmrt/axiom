@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { sync as findUpSync } from "find-up";
+import { globSync } from "glob";
 
 // Debug utility - controlled by AXIOM_DEBUG environment variable
 const isDebugEnabled = () =>
@@ -127,7 +127,11 @@ export const loadConfig = async <T extends object>(
 ): Promise<ConfigContainer & T> => {
 	debug(
 		`Loading config with options:`,
-		JSON.stringify({ env: input?.env, cwd: input?.cwd, hasOverrides: !!input?.overrides }),
+		JSON.stringify({
+			env: input?.env,
+			cwd: input?.cwd,
+			hasOverrides: !!input?.overrides,
+		}),
 	);
 
 	// get the base file
@@ -195,30 +199,51 @@ export function mergeDeep(target: any, ...sources: any[]) {
 
 export const configPath = (input?: LoadConfigInput): string => {
 	const envIndicator = input?.env ? `.${input.env}` : "";
-	const searchPatterns = [
-		`.axiom${envIndicator}.json`,
-		`.axiom${envIndicator}.js`,
-		`.axiom${envIndicator}.mjs`,
-		`.axiom${envIndicator}.ts`,
-		`.axiom${envIndicator}.mts`,
-	];
+	const extensions = ["json", "js", "mjs", "ts", "mts"];
+
+	// Build glob pattern for all extensions
+	const pattern = `.axiom${envIndicator}.{${extensions.join(",")}}`;
 
 	debug(
-		`Searching for config files: ${searchPatterns.join(", ")}`,
+		`Searching for config files with pattern: ${pattern}`,
 		input?.cwd ? `from ${input.cwd}` : "from current directory",
 	);
 
-	const p = findUpSync(searchPatterns, { cwd: input?.cwd });
+	// Search from the specified cwd or current directory, going up the directory tree
+	const cwd = input?.cwd || process.cwd();
+	let currentDir = cwd;
+	let found: string | undefined;
 
-	if (p === undefined) {
-		debug(
-			`Config file not found! Searched for: ${searchPatterns.join(", ")}`,
-		);
+	// Walk up the directory tree until we find a config file or reach the root
+	while (true) {
+		const matches = globSync(pattern, {
+			cwd: currentDir,
+			absolute: true,
+			nodir: true,
+		});
+
+		if (matches.length > 0) {
+			// Return the first match (prioritized by extension order)
+			found = matches[0];
+			break;
+		}
+
+		// Move up one directory
+		const parent = require("node:path").dirname(currentDir);
+		if (parent === currentDir) {
+			// Reached the root directory
+			break;
+		}
+		currentDir = parent;
+	}
+
+	if (found === undefined) {
+		debug(`Config file not found! Searched for pattern: ${pattern}`);
 		throw new Error(
 			`Axiom config files not found: .axiom${envIndicator}.json, .axiom${envIndicator}.js .axiom${envIndicator}.ts`,
 		);
 	}
 
-	debug(`Found config file: ${p}`);
-	return p;
+	debug(`Found config file: ${found}`);
+	return found;
 };
