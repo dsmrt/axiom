@@ -1,8 +1,8 @@
 import {
-  SSMClient,
-  Parameter,
-  GetParametersByPathCommand,
-  GetParametersCommand,
+	SSMClient,
+	type Parameter,
+	GetParametersByPathCommand,
+	GetParametersCommand,
 } from "@aws-sdk/client-ssm";
 
 export const ssmClient = new SSMClient({});
@@ -22,35 +22,35 @@ export const ssmClient = new SSMClient({});
 //           - "ssm:GetParametersByPath"
 //           Resource: !Sub 'arn:aws:ssm:*:*:parameter/${PARAMETER_PATH}/*'
 export const getParametersByPath = async (
-  path: string,
-  parameters?: Parameter[],
-  nextToken?: string,
-  client?: SSMClient,
+	path: string,
+	parameters?: Parameter[],
+	nextToken?: string,
+	client?: SSMClient,
 ): Promise<Parameter[]> => {
-  client ??= ssmClient;
+	client ??= ssmClient;
 
-  let returnParams: Parameter[] = parameters || [];
+	let returnParams: Parameter[] = parameters || [];
 
-  const command = new GetParametersByPathCommand({
-    Path: path,
-    Recursive: true,
-    WithDecryption: true,
-    NextToken: nextToken,
-  });
+	const command = new GetParametersByPathCommand({
+		Path: path,
+		Recursive: true,
+		WithDecryption: true,
+		NextToken: nextToken,
+	});
 
-  const output = await client.send(command);
+	const output = await client.send(command);
 
-  // merge parameters
-  if (output.Parameters !== undefined) {
-    returnParams = [...returnParams, ...output.Parameters];
-  }
+	// merge parameters
+	if (output.Parameters !== undefined) {
+		returnParams = [...returnParams, ...output.Parameters];
+	}
 
-  if (output.NextToken !== undefined) {
-    return getParametersByPath(path, returnParams, output.NextToken, client);
-  }
+	if (output.NextToken !== undefined) {
+		return getParametersByPath(path, returnParams, output.NextToken, client);
+	}
 
-  // return all
-  return returnParams;
+	// return all
+	return returnParams;
 };
 
 // ** CloudFormation Example **
@@ -70,22 +70,22 @@ export const getParametersByPath = async (
 //           - ${name2}
 //           - ${name3
 export const getParameters = async (
-  names: string[],
-  client?: SSMClient,
+	names: string[],
+	client?: SSMClient,
 ): Promise<Parameter[]> => {
-  client ??= ssmClient;
+	client ??= ssmClient;
 
-  const command = new GetParametersCommand({
-    Names: names,
-    WithDecryption: true,
-  });
+	const command = new GetParametersCommand({
+		Names: names,
+		WithDecryption: true,
+	});
 
-  const result = await client.send(command);
-  if (result.Parameters === undefined) {
-    return [];
-  }
+	const result = await client.send(command);
+	if (result.Parameters === undefined) {
+		return [];
+	}
 
-  return result.Parameters;
+	return result.Parameters;
 };
 
 /**
@@ -95,17 +95,17 @@ export const getParameters = async (
  * @param params
  */
 export const extractParamValue = (
-  path: string,
-  name: string,
-  params: Parameter[],
+	path: string,
+	name: string,
+	params: Parameter[],
 ): string => {
-  const fullName = `${path.replace(/\/$/, "")}/${name}`;
+	const fullName = `${path.replace(/\/$/, "")}/${name}`;
 
-  const item = params.find((item) => item.Name === fullName);
+	const item = params.find((item) => item.Name === fullName);
 
-  if (!item || !item.Value) {
-    throw new Error(`Parameter '${fullName}' is not set.`);
-  }
+	if (!item || !item.Value) {
+		throw new Error(`Parameter '${fullName}' is not set.`);
+	}
 
-  return item.Value;
+	return item.Value;
 };

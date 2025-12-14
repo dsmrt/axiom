@@ -1,76 +1,96 @@
-import { ParameterCollection } from "./ssm-parameter-collection";
-import { Parameter } from "@aws-sdk/client-ssm";
+import type { Parameter } from "@aws-sdk/client-ssm";
+import { describe, expect, it, vi } from "vitest";
 import { basePath, result1 } from "./__mocks__/get-parameters-by-path-result";
-import { vi, describe, it, expect } from "vitest";
+import { ParameterCollection } from "./ssm-parameter-collection";
 
 vi.mock("./ssm-parameters", () => {
-  return {
-    getParametersByPath: vi.fn((): Promise<Parameter[]> => {
-      return Promise.resolve(result1.Parameters as Parameter[]);
-    }),
-  };
+	return {
+		getParametersByPath: vi.fn((): Promise<Parameter[]> => {
+			return Promise.resolve(result1.Parameters as Parameter[]);
+		}),
+	};
 });
 
 describe("Parameter Collection", () => {
-  it("Should create collection successfully", async () => {
-    const path = "/foo/bar/baz";
-    const collection = new ParameterCollection(path);
+	it("Should create collection successfully", async () => {
+		const path = "/foo/bar/baz";
+		const collection = new ParameterCollection(path);
 
-    expect(collection.path).toBe(path);
-  });
+		expect(collection.path).toBe(path);
+	});
 
-  it("Should throw error if path is not valid", async () => {
-    const path = "";
+	it("Should throw error if path is not valid", async () => {
+		const path = "";
 
-    let error = undefined;
-    try {
-      await new ParameterCollection(path).getParam("one");
-    } catch (err) {
-      error = err;
-    }
+		let error: Error | undefined;
+		try {
+			await new ParameterCollection(path).getParam("one");
+		} catch (err) {
+			error = err;
+		}
 
-    expect(error).toBeInstanceOf(Error);
-  });
+		expect(error).toBeInstanceOf(Error);
+	});
 
-  it("findParam should return a proper value", async () => {
-    const collection = new ParameterCollection(basePath);
-    const one = await collection.findParam("one");
-    const foo = await collection.findParam("foo");
+	it("findParam should return a proper value", async () => {
+		const collection = new ParameterCollection(basePath);
+		const one = await collection.findParam("one");
+		const foo = await collection.findParam("foo");
 
-    expect(one?.Value).toBe("one");
-    expect(foo?.Value).toBe(undefined);
-  });
+		expect(one?.Value).toBe("one");
+		expect(foo?.Value).toBe(undefined);
+	});
 
-  it("getParam should return a proper value", async () => {
-    const collection = new ParameterCollection(basePath);
+	it("getParam should return a proper value", async () => {
+		const collection = new ParameterCollection(basePath);
 
-    expect((await collection.getParam("one"))?.Value).toBe("one");
-  });
+		expect((await collection.getParam("one"))?.Value).toBe("one");
+	});
 
-  it("getParam should throw an error if param does not exist", async () => {
-    const collection = new ParameterCollection(basePath);
+	it("getParam should throw an error if param does not exist", async () => {
+		const collection = new ParameterCollection(basePath);
 
-    let error = undefined;
-    try {
-      await collection.getParam("foo");
-    } catch (err) {
-      error = err;
-    }
+		let error: Error | undefined;
+		try {
+			await collection.getParam("foo");
+		} catch (err) {
+			error = err;
+		}
 
-    expect(error).toBeInstanceOf(Error);
-  });
+		expect(error).toBeInstanceOf(Error);
+	});
 
-  it("Should return boolean if param exists", async () => {
-    const collection = new ParameterCollection(basePath);
+	it("Should return boolean if param exists", async () => {
+		const collection = new ParameterCollection(basePath);
 
-    expect(await collection.hasParam("one")).toBe(true);
-    expect(await collection.hasParam("foo")).toBe(false);
-  });
+		expect(await collection.hasParam("one")).toBe(true);
+		expect(await collection.hasParam("foo")).toBe(false);
+	});
 
-  it("Should handle nested param paths", async () => {
-    const path = "/app";
-    const collection = new ParameterCollection(path);
+	it("Should handle nested param paths", async () => {
+		const path = "/app";
+		const collection = new ParameterCollection(path);
 
-    expect((await collection.findParam("env/one"))?.Value).toBe("one");
-  });
+		expect((await collection.findParam("env/one"))?.Value).toBe("one");
+	});
+
+	it("Should call loadParameters only once when already loaded", async () => {
+		const collection = new ParameterCollection(basePath);
+
+		// First call loads parameters
+		await collection.get();
+
+		// Second call should not load again (map is already populated)
+		const params = await collection.get();
+
+		expect(params.size).toBeGreaterThan(0);
+	});
+
+	it("hasParam should call loadParameters if not already loaded", async () => {
+		const collection = new ParameterCollection(basePath);
+
+		const result = await collection.hasParam("one");
+
+		expect(result).toBe(true);
+	});
 });

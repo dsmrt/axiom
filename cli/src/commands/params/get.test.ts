@@ -1,63 +1,74 @@
 import { vi, describe, expect, it } from "vitest";
-import { GetCommand, GetOptions } from "./get";
-import { Parameter } from "@aws-sdk/client-ssm";
-import { Config } from "@dsmrt/axiom-config";
-import { ArgumentsCamelCase } from "yargs";
+import { GetCommand, type GetOptions } from "./get";
+import type { Parameter } from "@aws-sdk/client-ssm";
+import type { Config } from "@dsmrt/axiom-config";
+import type { ArgumentsCamelCase } from "yargs";
 
 const config: Config = {
-  name: "test",
-  env: "test",
-  aws: {
-    profile: "fake",
-    account: "fake",
-    region: "fake",
-    baseParameterPath: "/fake/test/",
-  },
+	name: "test",
+	env: "test",
+	aws: {
+		profile: "fake",
+		account: "fake",
+		region: "fake",
+		baseParameterPath: "/fake/test/",
+	},
 };
 
 const options: GetOptions = {
-  env: "test",
-  path: "test",
+	env: "test",
+	path: "test",
 };
 
 const args: ArgumentsCamelCase = {
-  _: [""],
-  $0: "",
+	_: [""],
+	$0: "",
 };
 
 vi.mock("@dsmrt/axiom-config", () => {
-  return {
-    loadConfig: (): Config => config,
-  };
+	return {
+		loadConfig: async (): Promise<Config> => config,
+	};
 });
 
 vi.mock("@dsmrt/axiom-aws-sdk", () => {
-  return {
-    ParameterCollection: vi.fn(() => {
-      return {
-        get: vi.fn(async () => {
-          const one: Parameter = {
-            Name: "/fake/test/one",
-            Value: "hello world",
-          };
-          const two: Parameter = {
-            Name: "/fake/test/two",
-            Value: "hi us",
-          };
-          return new Map([
-            ["one", one],
-            ["two", two],
-          ]);
-        }),
-      };
-    }),
-  };
+	return {
+		ParameterCollection: class {
+			get = vi.fn(async () => {
+				const one: Parameter = {
+					Name: "/fake/test/one",
+					Value: "hello world",
+				};
+				const two: Parameter = {
+					Name: "/fake/test/two",
+					Value: "hi us",
+				};
+				return new Map([
+					["one", one],
+					["two", two],
+				]);
+			});
+		},
+	};
 });
 
 describe("cli get command", () => {
-  it("test handler", () => {
-    const base = new GetCommand();
-    base.handler({ ...args, ...config, ...options });
-    expect(base.command).toBe("get [path]");
-  });
+	it("test handler", async () => {
+		const base = new GetCommand();
+		await base.handler({ ...args, ...config, ...options });
+		expect(base.command).toBe("get [path]");
+	});
+
+	it("test builder", () => {
+		const base = new GetCommand();
+		const mockYargs = {
+			options: vi.fn().mockReturnThis(),
+			positional: vi.fn().mockReturnThis(),
+			// biome-ignore lint/suspicious/noExplicitAny: it's a test
+		} as any;
+		const result = base.builder(mockYargs);
+		expect(mockYargs.options).toHaveBeenCalled();
+		expect(mockYargs.positional).toHaveBeenCalled();
+		expect(result).toBeDefined();
+	});
 });
