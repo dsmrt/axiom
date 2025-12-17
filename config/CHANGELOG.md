@@ -1,5 +1,11 @@
 # @dsmrt/axiom-config
 
+## 1.2.1
+
+### Patch Changes
+
+- c941d5d: fix init cli command; fix loadConfigByEnv to allow undefined env
+
 ## 1.2.0
 
 ### Minor Changes
