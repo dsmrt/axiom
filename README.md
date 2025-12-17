@@ -78,7 +78,7 @@ const config: Config = {
     account: "123456789012",
     region: "us-east-1",
     profile: "my-aws-profile",
-    baseParameterPath: "/my-app/prod",
+    baseParameterPath: "/my-app",
   },
   // Optional: customize the production environment name (defaults to "prod")
   prodEnvName: "production",
@@ -102,7 +102,7 @@ const config: Config = {
     account: "987654321098",
     region: "us-west-2",
     profile: "dev-profile",
-    baseParameterPath: "/my-app/dev",
+    baseParameterPath: "/my-app",
   },
 };
 
@@ -120,7 +120,7 @@ const config: Config = {
     account: "111222333444",
     region: "us-east-1",
     profile: "staging-profile",
-    baseParameterPath: "/my-app/staging",
+    baseParameterPath: "/my-app",
   },
 };
 
@@ -164,7 +164,7 @@ const config: Config<MyAppConfig> = {
     account: "123456789012",
     region: "us-east-1",
     profile: "prod-profile",
-    baseParameterPath: "/my-app/prod",
+    baseParameterPath: "/my-app",
   },
   database: {
     host: "prod-db.example.com",
@@ -282,8 +282,8 @@ axiom init \
        account: "123456789012",
        region: "us-west-2",
        profile: "production",
+       baseParameterPath: "/my-app",
      },
-     baseParameterPath: "/my-app/prod",
    };
 
    export default config;
@@ -295,7 +295,9 @@ axiom init \
 
    const config: Partial<Config> = {
      env: "dev",
-     baseParameterPath: undefined, // Auto-generated as /{name}/dev
+     aws:{
+         account: "xxx"
+     }
    };
 
    export default config;
@@ -329,7 +331,7 @@ const config: AxiomConfig = {
     region: "us-west-2",
     profile: "production",
   },
-  baseParameterPath: "/my-app/prod",
+  baseParameterPath: "/my-app",
 
   // Your custom properties (type-safe!)
   apiUrl: "https://api.example.com",
@@ -379,7 +381,7 @@ axiom config --env staging
     "account": "123456789012",
     "region": "us-east-1",
     "profile": "prod-profile",
-    "baseParameterPath": "/my-app/prod"
+    "baseParameterPath": "/my-app"
   }
 }
 ```
@@ -832,7 +834,7 @@ const config: Config = {
     account: "123456789012",
     region: "us-east-1",
     profile: "prod-profile",
-    baseParameterPath: "/my-app/prod",
+    baseParameterPath: "/my-app",
   },
 };
 

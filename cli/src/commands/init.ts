@@ -235,8 +235,9 @@ const config: Config = {`;
 		account: "${config.account}",
 		region: "${config.region}",
 		profile: "${config.profile}",
+        baseParameterPath: "/${config.name}",
 	},
-	baseParameterPath: "/${config.name}/prod",${
+	${
 		hasCustomTypes
 			? `
 
@@ -266,7 +267,10 @@ const config: Partial<Config> = {`;
 
 		return `${importStatement}
 	env: "dev",
-	baseParameterPath: undefined, // Will be auto-generated as /{name}/dev${
+    aws: {
+        account: "xxx",
+    },
+	${
 		hasCustomTypes
 			? `,
 

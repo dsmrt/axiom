@@ -11,9 +11,6 @@ const MOCK_AXIOM_JSON_CONFIG_DEV = `${__dirname}__mocks__/json/.axiom.dev.json`;
 const MOCK_AXIOM_JS_CONFIG_DIR = `${__dirname}__mocks__/js/`;
 const MOCK_AXIOM_JS_CONFIG_DEV = `${__dirname}__mocks__/js/.axiom.dev.js`;
 
-// const MOCK_AXIOM_TS_CONFIG_DIR = `${__dirname}__mocks__/ts/`;
-// const MOCK_AXIOM_TS_CONFIG_DEV = `${__dirname}__mocks__/ts/.axiom.dev.ts`;
-
 describe("load configs", () => {
 	afterEach(() => {
 		vi.clearAllMocks();
@@ -153,6 +150,17 @@ describe("load configs", () => {
 describe("loadConfigByEnv", () => {
 	afterEach(() => {
 		vi.clearAllMocks();
+	});
+
+	it("should load config by environment name when env is undefined", async () => {
+		const { loadConfigByEnv } = await import("./index");
+		const config = await loadConfigByEnv(undefined, {
+			cwd: MOCK_AXIOM_JSON_CONFIG_DIR,
+		});
+
+		expect(config.env).toBe("prod");
+		expect(config.aws.region).toBe("us-east-1");
+		expect(config.name).toBe("my-prod-app");
 	});
 
 	it("should load config by environment name", async () => {
