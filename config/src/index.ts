@@ -123,7 +123,7 @@ export const importConfigFromPath = async (path: string): Promise<Config> => {
 };
 
 export const loadConfigByEnv = async <T extends object>(
-	env: string,
+	env?: string,
 	options?: Omit<LoadConfigInput, "env">,
 ): Promise<ConfigContainer & T> => {
 	return await loadConfig({ env: env, ...options });

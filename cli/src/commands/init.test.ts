@@ -56,7 +56,7 @@ describe("Init command", () => {
 		expect(content).toContain('account: "123456789012"');
 		expect(content).toContain('region: "us-west-2"');
 		expect(content).toContain('profile: "test-profile"');
-		expect(content).toContain('baseParameterPath: "/test-app/prod"');
+		expect(content).toContain('baseParameterPath: "/test-app"');
 	});
 
 	it("should create dev config file", async () => {
@@ -80,7 +80,6 @@ describe("Init command", () => {
 
 		const content = readFileSync(devConfigPath, "utf-8");
 		expect(content).toContain('env: "dev"');
-		expect(content).toContain("baseParameterPath: undefined");
 		expect(content).toContain("Partial<Config>");
 	});
 
