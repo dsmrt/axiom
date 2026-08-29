@@ -9,7 +9,7 @@
 		"lint:fix": "pnpm run -r --if-present lint:fix",
 		"test": "pnpm run -r --if-present test",
 		"build": "pnpm run -r --if-present build",
-		"changeset-publish": "pnpm run build && pnpm changeset publish"
+		"changeset-publish": "pnpm run build && pnpm changeset publish --provenance"
 	},
 	"keywords": [],
 	"author": "",
