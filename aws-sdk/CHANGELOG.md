@@ -1,5 +1,11 @@
 # @dsmrt/axiom-aws-sdk
 
+## 1.0.1
+
+### Patch Changes
+
+- 31ae74a: fix(ci): move --provenance into changeset-publish script to avoid pnpm arg-passthrough bug
+
 ## 1.0.0
 
 ### Major Changes

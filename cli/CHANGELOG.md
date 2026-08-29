@@ -1,5 +1,14 @@
 # @dsmrt/axiom-cli
 
+## 1.3.4
+
+### Patch Changes
+
+- 31ae74a: fix(ci): move --provenance into changeset-publish script to avoid pnpm arg-passthrough bug
+- Updated dependencies [31ae74a]
+  - @dsmrt/axiom-config@1.2.3
+  - @dsmrt/axiom-aws-sdk@1.0.1
+
 ## 1.3.3
 
 ### Patch Changes
