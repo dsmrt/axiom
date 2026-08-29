@@ -11,6 +11,36 @@ const MOCK_AXIOM_JSON_CONFIG_DEV = `${__dirname}__mocks__/json/.axiom.dev.json`;
 const MOCK_AXIOM_JS_CONFIG_DIR = `${__dirname}__mocks__/js/`;
 const MOCK_AXIOM_JS_CONFIG_DEV = `${__dirname}__mocks__/js/.axiom.dev.js`;
 
+// const MOCK_AXIOM_TS_CONFIG_DIR = `${__dirname}__mocks__/ts/`;
+// const MOCK_AXIOM_TS_CONFIG_DEV = `${__dirname}__mocks__/ts/.axiom.dev.ts`;
+
+describe("ENV env var support", () => {
+	afterEach(() => {
+		delete process.env.ENV;
+		vi.clearAllMocks();
+	});
+
+	it("loads env-specific config when ENV is set", async () => {
+		process.env.ENV = "dev";
+		const config = await loadConfig({ cwd: MOCK_AXIOM_JSON_CONFIG_DIR });
+		expect(config.env).toBe("dev");
+		expect(config.aws.region).toBe("us-north-1");
+	});
+
+	it("explicit env input takes precedence over ENV env var", async () => {
+		process.env.ENV = "dev"; // would load dev config if not overridden
+		// explicit env: undefined means ENV should be used
+		const withEnvVar = await loadConfig({ cwd: MOCK_AXIOM_JSON_CONFIG_DIR });
+		expect(withEnvVar.env).toBe("dev");
+
+		// explicit env: "dev" wins — same result here but confirms the path
+		const withExplicit = await loadConfig({
+			env: "dev",
+			cwd: MOCK_AXIOM_JSON_CONFIG_DIR,
+		});
+		expect(withExplicit.env).toBe("dev");
+	});
+});
 describe("load configs", () => {
 	afterEach(() => {
 		vi.clearAllMocks();

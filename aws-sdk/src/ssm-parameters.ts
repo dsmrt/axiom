@@ -1,8 +1,8 @@
 import {
-	SSMClient,
-	type Parameter,
 	GetParametersByPathCommand,
 	GetParametersCommand,
+	type Parameter,
+	SSMClient,
 } from "@aws-sdk/client-ssm";
 
 export const ssmClient = new SSMClient({});

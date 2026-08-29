@@ -132,10 +132,12 @@ export const loadConfigByEnv = async <T extends object>(
 export const loadConfig = async <T extends object>(
 	input?: LoadConfigInput,
 ): Promise<ConfigContainer & T> => {
+	const env = input?.env || process.env.ENV;
+
 	debug(
 		`Loading config with options:`,
 		JSON.stringify({
-			env: input?.env,
+			env,
 			cwd: input?.cwd,
 			hasOverrides: !!input?.overrides,
 		}),
@@ -155,9 +157,9 @@ export const loadConfig = async <T extends object>(
 	let overrides = input?.overrides || {};
 
 	// get the environment file
-	if (input?.env) {
-		debug(`Looking for environment-specific config for: ${input.env}`);
-		const envConfigPath = configPath(input);
+	if (env) {
+		debug(`Looking for environment-specific config for: ${env}`);
+		const envConfigPath = configPath({ ...input, env });
 		debug(`Loading env config from: ${envConfigPath}`);
 		const devConfig = await importConfigFromPath(envConfigPath);
 		debug(`Env config loaded: ${devConfig.name} (env: ${devConfig.env})`);

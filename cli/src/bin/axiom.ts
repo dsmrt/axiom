@@ -23,6 +23,10 @@ yargs(process.argv.slice(2))
 		if (argv.debug) {
 			process.env.AXIOM_DEBUG = "true";
 		}
+		// Support ENV=<name> as an alias for --env <name>
+		if (argv.env === undefined && process.env.ENV) {
+			argv.env = process.env.ENV;
+		}
 	})
 	.command(new Init())
 	.command(new Config())
