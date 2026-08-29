@@ -1,5 +1,11 @@
 # @dsmrt/axiom-cli
 
+## 1.3.3
+
+### Patch Changes
+
+- f64437b: fix(ci): add npm provenance via OIDC and fix NPM_TOKEN env for changesets/action
+
 ## 1.3.2
 
 ### Patch Changes
