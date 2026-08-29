@@ -1,5 +1,11 @@
 # @dsmrt/axiom-aws-sdk
 
+## 1.0.2
+
+### Patch Changes
+
+- 762e5c6: chore: test npm Trusted Publisher OIDC publish flow
+
 ## 1.0.1
 
 ### Patch Changes

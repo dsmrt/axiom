@@ -1,5 +1,11 @@
 # @dsmrt/axiom-config
 
+## 1.2.4
+
+### Patch Changes
+
+- 762e5c6: chore: test npm Trusted Publisher OIDC publish flow
+
 ## 1.2.3
 
 ### Patch Changes

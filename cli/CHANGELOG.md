@@ -1,5 +1,14 @@
 # @dsmrt/axiom-cli
 
+## 1.3.5
+
+### Patch Changes
+
+- 762e5c6: chore: test npm Trusted Publisher OIDC publish flow
+- Updated dependencies [762e5c6]
+  - @dsmrt/axiom-config@1.2.4
+  - @dsmrt/axiom-aws-sdk@1.0.2
+
 ## 1.3.4
 
 ### Patch Changes
