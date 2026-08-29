@@ -1,5 +1,14 @@
 # @dsmrt/axiom-cli
 
+## 1.3.6
+
+### Patch Changes
+
+- 0459ce3: fix(ci): restore NPM_TOKEN auth — pnpm publish does not support npm Trusted Publishers OIDC
+- Updated dependencies [0459ce3]
+  - @dsmrt/axiom-config@1.2.5
+  - @dsmrt/axiom-aws-sdk@1.0.3
+
 ## 1.3.5
 
 ### Patch Changes
