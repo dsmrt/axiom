@@ -6,6 +6,7 @@ import type { ArgumentsCamelCase, Argv, CommandModule } from "yargs";
 import { CachedCredentialProvider } from "../../aws/credentials-provider";
 import { awsOptions, commonOptions } from "../../options";
 import { debug } from "../../debug";
+import { buildPath } from "./utils";
 
 export interface GetOptions {
 	env: string;
@@ -46,7 +47,7 @@ export class GetCommand<U extends GetOptions>
 			`Creating SSM client with region: ${config.aws.region}, profile: ${config.aws.profile}`,
 		);
 		const collection = new ParameterCollection(
-			config.aws?.baseParameterPath,
+			buildPath(config, args.path),
 			new SSMClient({
 				region: config.aws.region,
 				credentials: await CachedCredentialProvider({
