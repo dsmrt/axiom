@@ -1,5 +1,18 @@
 # @dsmrt/axiom-config
 
+## 1.2.2
+
+### Patch Changes
+
+- 5549ab3: fix: upgrade release CI to Node 22 with frozen lockfile
+- 6ac6d26: fix: support `ENV` environment variable for selecting config
+
+  `ENV=dev axiom params get` now loads `.axiom.dev.js` (equivalent to `--env dev`).
+
+  **`@dsmrt/axiom-config`**: `loadConfig` falls back to `process.env.ENV` when no `env` is passed, so library consumers also benefit.
+
+  **`@dsmrt/axiom-cli`**: middleware maps `ENV` → `argv.env` at parse time so all subcommands see the resolved value. Priority order: `--env` flag > `AXIOM_ENV` > `ENV`.
+
 ## 1.2.1
 
 ### Patch Changes
