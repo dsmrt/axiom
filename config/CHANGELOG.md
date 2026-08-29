@@ -1,5 +1,11 @@
 # @dsmrt/axiom-config
 
+## 1.2.3
+
+### Patch Changes
+
+- 31ae74a: fix(ci): move --provenance into changeset-publish script to avoid pnpm arg-passthrough bug
+
 ## 1.2.2
 
 ### Patch Changes
