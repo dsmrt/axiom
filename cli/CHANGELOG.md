@@ -1,5 +1,16 @@
 # @dsmrt/axiom-cli
 
+## 1.3.8
+
+### Patch Changes
+
+- fc17744: chore: upgrade to Node 24 and add mise config for local dev
+- fc17744: chore: test npm Trusted Publishers OIDC publish on Node 24
+- Updated dependencies [fc17744]
+- Updated dependencies [fc17744]
+  - @dsmrt/axiom-config@1.2.7
+  - @dsmrt/axiom-aws-sdk@1.0.5
+
 ## 1.3.7
 
 ### Patch Changes
