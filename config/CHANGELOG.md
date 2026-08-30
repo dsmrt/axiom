@@ -1,5 +1,11 @@
 # @dsmrt/axiom-config
 
+## 1.2.6
+
+### Patch Changes
+
+- 221d99c: chore: upgrade to Node 24 and add mise config for local dev
+
 ## 1.2.5
 
 ### Patch Changes
