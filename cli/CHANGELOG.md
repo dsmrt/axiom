@@ -1,5 +1,14 @@
 # @dsmrt/axiom-cli
 
+## 1.3.7
+
+### Patch Changes
+
+- 221d99c: chore: upgrade to Node 24 and add mise config for local dev
+- Updated dependencies [221d99c]
+  - @dsmrt/axiom-config@1.2.6
+  - @dsmrt/axiom-aws-sdk@1.0.4
+
 ## 1.3.6
 
 ### Patch Changes
