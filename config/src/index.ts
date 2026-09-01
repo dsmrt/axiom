@@ -143,28 +143,59 @@ export const loadConfig = async <T extends object>(
 		}),
 	);
 
-	// get the base file
+	// Try to find the base config file (no env suffix); don't throw yet if missing.
 	debug(`Looking for base config file...`);
-	const baseConfigFile = configPath({
-		...input,
-		env: undefined,
-	});
+	let baseConfigFile: string | undefined;
+	try {
+		baseConfigFile = configPath({ ...input, env: undefined });
+	} catch {
+		// No no-env-suffix config file found; handled below.
+	}
 
-	debug(`Loading base config from: ${baseConfigFile}`);
-	const baseConfig = await importConfigFromPath(baseConfigFile);
-	debug(`Base config loaded: ${baseConfig.name} (env: ${baseConfig.env})`);
-
+	let baseConfig: Config;
 	let overrides = input?.overrides || {};
 
-	// get the environment file
 	if (env) {
-		debug(`Looking for environment-specific config for: ${env}`);
-		const envConfigPath = configPath({ ...input, env });
-		debug(`Loading env config from: ${envConfigPath}`);
-		const devConfig = await importConfigFromPath(envConfigPath);
-		debug(`Env config loaded: ${devConfig.name} (env: ${devConfig.env})`);
-		overrides = mergeDeep(devConfig, overrides);
-		debug(`Merged env config with overrides`);
+		// Load base config (if found) to determine prodEnvName.
+		const tempBase = baseConfigFile
+			? await importConfigFromPath(baseConfigFile)
+			: null;
+		if (tempBase) {
+			debug(`Base config loaded: ${tempBase.name} (env: ${tempBase.env})`);
+		}
+
+		const prodEnvName = tempBase?.prodEnvName ?? "prod";
+
+		if (env === prodEnvName) {
+			// For the prod env, the no-suffix config (.axiom.js) IS the prod config.
+			// Only fall back to .axiom.prod.js if the no-suffix config doesn't exist.
+			if (tempBase) {
+				debug(`Using base config as prod config`);
+				baseConfig = tempBase;
+			} else {
+				const prodConfigFile = configPath({ ...input, env }); // throws if not found
+				debug(`Loading prod config from: ${prodConfigFile}`);
+				baseConfig = await importConfigFromPath(prodConfigFile);
+				debug(`Prod config loaded: ${baseConfig.name} (env: ${baseConfig.env})`);
+			}
+		} else {
+			// For non-prod envs: load base (required) + env-specific merged on top.
+			const file = baseConfigFile ?? configPath({ ...input, env: undefined }); // throws with helpful error
+			baseConfig = tempBase ?? (await importConfigFromPath(file));
+			debug(`Looking for environment-specific config for: ${env}`);
+			const envConfigPath = configPath({ ...input, env });
+			debug(`Loading env config from: ${envConfigPath}`);
+			const envConfig = await importConfigFromPath(envConfigPath);
+			debug(`Env config loaded: ${envConfig.name} (env: ${envConfig.env})`);
+			overrides = mergeDeep(envConfig, overrides);
+			debug(`Merged env config with overrides`);
+		}
+	} else {
+		// No env: just load the base config.
+		const file = baseConfigFile ?? configPath({ ...input, env: undefined }); // throws if not found
+		debug(`Loading base config from: ${file}`);
+		baseConfig = await importConfigFromPath(file);
+		debug(`Base config loaded: ${baseConfig.name} (env: ${baseConfig.env})`);
 	}
 
 	const configObject = mergeDeep(baseConfig, overrides);
@@ -172,7 +203,6 @@ export const loadConfig = async <T extends object>(
 		`Final config: ${configObject.name} (env: ${configObject.env}, isProd: ${configObject.env === (configObject.prodEnvName || "prod")})`,
 	);
 
-	// merge env file
 	return new ConfigContainer(configObject) as ConfigContainer & T;
 };
 

@@ -40,6 +40,23 @@ describe("ENV env var support", () => {
 		});
 		expect(withExplicit.env).toBe("dev");
 	});
+
+	it("ENV=prod uses the no-suffix config without also loading .axiom.prod.*", async () => {
+		process.env.ENV = "prod";
+		// .axiom.prod.json does not exist in the mock dir — this should not throw
+		const config = await loadConfig({ cwd: MOCK_AXIOM_JSON_CONFIG_DIR });
+		expect(config.env).toBe("prod");
+		expect(config.isProd()).toBeTruthy();
+	});
+
+	it("explicit env: prod uses the no-suffix config without also loading .axiom.prod.*", async () => {
+		const config = await loadConfig({
+			env: "prod",
+			cwd: MOCK_AXIOM_JSON_CONFIG_DIR,
+		});
+		expect(config.env).toBe("prod");
+		expect(config.isProd()).toBeTruthy();
+	});
 });
 describe("load configs", () => {
 	afterEach(() => {
