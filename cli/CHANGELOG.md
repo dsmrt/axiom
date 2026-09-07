@@ -1,5 +1,14 @@
 # @dsmrt/axiom-cli
 
+## 1.3.10
+
+### Patch Changes
+
+- cbe2273: chore: bump all packages to pick up dependency updates
+- Updated dependencies [cbe2273]
+  - @dsmrt/axiom-config@1.2.10
+  - @dsmrt/axiom-aws-sdk@1.0.7
+
 ## 1.3.9
 
 ### Patch Changes

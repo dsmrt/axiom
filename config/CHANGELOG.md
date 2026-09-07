@@ -1,5 +1,11 @@
 # @dsmrt/axiom-config
 
+## 1.2.10
+
+### Patch Changes
+
+- cbe2273: chore: bump all packages to pick up dependency updates
+
 ## 1.2.9
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @dsmrt/axiom-aws-sdk
 
+## 1.0.7
+
+### Patch Changes
+
+- cbe2273: chore: bump all packages to pick up dependency updates
+
 ## 1.0.6
 
 ### Patch Changes
