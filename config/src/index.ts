@@ -1,5 +1,5 @@
-import { readFileSync } from "node:fs";
-import { globSync } from "glob";
+import { existsSync, readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 
 // Debug utility - controlled by AXIOM_DEBUG environment variable
 const isDebugEnabled = () =>
@@ -240,44 +240,36 @@ export const configPath = (input?: LoadConfigInput): string => {
 	const envIndicator = input?.env ? `.${input.env}` : "";
 	const extensions = ["json", "js", "mjs", "ts", "mts"];
 
-	// Build glob pattern for all extensions
-	const pattern = `.axiom${envIndicator}.{${extensions.join(",")}}`;
+	const prefix = `.axiom${envIndicator}`;
 
 	debug(
-		`Searching for config files with pattern: ${pattern}`,
+		`Searching for config files matching: ${prefix}.{${extensions.join(",")}}`,
 		input?.cwd ? `from ${input.cwd}` : "from current directory",
 	);
 
-	// Search from the specified cwd or current directory, going up the directory tree
 	const cwd = input?.cwd || process.cwd();
 	let currentDir = cwd;
 	let found: string | undefined;
 
-	// Walk up the directory tree until we find a config file or reach the root
 	while (true) {
-		const matches = globSync(pattern, {
-			cwd: currentDir,
-			absolute: true,
-			nodir: true,
-		});
+		const matches = extensions
+			.map(ext => join(currentDir, `${prefix}.${ext}`))
+			.filter(existsSync);
 
 		if (matches.length > 0) {
-			// Return the first match (prioritized by extension order)
 			found = matches[0];
 			break;
 		}
 
-		// Move up one directory
-		const parent = require("node:path").dirname(currentDir);
+		const parent = dirname(currentDir);
 		if (parent === currentDir) {
-			// Reached the root directory
 			break;
 		}
 		currentDir = parent;
 	}
 
 	if (found === undefined) {
-		debug(`Config file not found! Searched for pattern: ${pattern}`);
+		debug(`Config file not found! Searched for: ${prefix}.{${extensions.join(",")}}`);
 		throw new Error(
 			`Axiom config files not found: .axiom${envIndicator}.json, .axiom${envIndicator}.js .axiom${envIndicator}.ts`,
 		);
