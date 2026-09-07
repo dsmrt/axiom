@@ -3,5 +3,8 @@ packages:
   - cli
   - config
 
+allowBuilds:
+  esbuild: true
+
 onlyBuiltDependencies:
   - esbuild
