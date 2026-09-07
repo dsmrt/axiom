@@ -1,5 +1,18 @@
 # @dsmrt/axiom-cli
 
+## 1.3.9
+
+### Patch Changes
+
+- d5d1a20: chore: remove glob dependency, update AWS SDK and tooling deps
+  
+  Replace glob with native node:fs existsSync for config file discovery.
+  Bump @aws-sdk/* from 3.716 to 3.1127, @biomejs/biome to 2.5.12, tsup to 8.5.1.
+- Updated dependencies [d5d1a20]
+- Updated dependencies [d5d1a20]
+  - @dsmrt/axiom-config@1.2.9
+  - @dsmrt/axiom-aws-sdk@1.0.6
+
 ## 1.3.8
 
 ### Patch Changes
