@@ -56,7 +56,7 @@
 		"@dsmrt/axiom-aws-sdk": "workspace:^",
 		"@dsmrt/axiom-config": "workspace:^",
 		"chalk": "^4.1.2",
-		"inquirer": "^14.2.1",
+		"inquirer": "^14.2.2",
 		"yargs": "^17.7.2"
 	}
 }
