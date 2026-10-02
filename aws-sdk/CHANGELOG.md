@@ -1,5 +1,11 @@
 # @dsmrt/axiom-aws-sdk
 
+## 1.0.8
+
+### Patch Changes
+
+- 8300560: fix: update transitive dependencies to resolve high-severity Dependabot alerts (brace-expansion, minimatch, nanoid, postcss, vite)
+
 ## 1.0.7
 
 ### Patch Changes
