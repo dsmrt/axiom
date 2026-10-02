@@ -1,5 +1,11 @@
 # @dsmrt/axiom-config
 
+## 1.2.11
+
+### Patch Changes
+
+- 8300560: fix: update transitive dependencies to resolve high-severity Dependabot alerts (brace-expansion, minimatch, nanoid, postcss, vite)
+
 ## 1.2.10
 
 ### Patch Changes

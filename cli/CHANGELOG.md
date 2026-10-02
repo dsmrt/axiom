@@ -1,5 +1,14 @@
 # @dsmrt/axiom-cli
 
+## 1.3.11
+
+### Patch Changes
+
+- 8300560: fix: update transitive dependencies to resolve high-severity Dependabot alerts (brace-expansion, minimatch, nanoid, postcss, vite)
+- Updated dependencies [8300560]
+  - @dsmrt/axiom-config@1.2.11
+  - @dsmrt/axiom-aws-sdk@1.0.8
+
 ## 1.3.10
 
 ### Patch Changes
